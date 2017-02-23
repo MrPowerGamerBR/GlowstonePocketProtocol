@@ -1,5 +1,8 @@
 package net.pocketdreams.sequinland.net.protocol.packets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.marfgamer.jraknet.Packet;
 import net.pocketdreams.sequinland.net.protocol.ProtocolInfo;
 

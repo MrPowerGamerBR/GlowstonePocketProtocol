@@ -78,6 +78,7 @@ public class PocketNetworkManager extends RakNetServer {
                 
                 // TODO: Better translator system
                 if (pocketPacket instanceof BatchPacket) {
+                    SequinUtils.processBatch((BatchPacket) pocketPacket, session);
                     return;
                 }
                 if (pocketPacket instanceof LoginPacket) {
