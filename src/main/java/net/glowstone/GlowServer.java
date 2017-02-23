@@ -39,6 +39,8 @@ import net.glowstone.util.bans.UuidListFile;
 import net.glowstone.util.loot.LootingManager;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+import net.pocketdreams.sequinland.net.PocketNetworkManager;
+
 import org.bukkit.*;
 import org.bukkit.BanList.Type;
 import org.bukkit.Warning.WarningState;
@@ -196,7 +198,11 @@ public final class GlowServer implements Server {
     /**
      * The network server used for network communication
      */
-    private GameServer networkServer;
+    public GameServer networkServer;
+    /**
+     * The pocket (MCPE/MCW10E) network manager
+     */
+    public PocketNetworkManager pocketNet;
     /**
      * A set of all online players.
      */
@@ -431,6 +437,7 @@ public final class GlowServer implements Server {
     public void run() {
         start();
         bind();
+        pocketBind();
         logger.info("Ready for connections.");
 
         try {
@@ -587,6 +594,11 @@ public final class GlowServer implements Server {
         }
     }
 
+    private void pocketBind() {
+        pocketNet = new PocketNetworkManager(19132, this.getMaxPlayers(), this);
+        pocketNet.startThreaded();
+    }
+    
     public void setPort(int port) {
         this.port = port;
     }
