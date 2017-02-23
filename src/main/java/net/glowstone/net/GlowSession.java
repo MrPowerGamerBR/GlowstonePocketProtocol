@@ -568,7 +568,14 @@ public final class GlowSession extends BasicSession {
     }
 
     @Override
+    public void send(Message message) {
+        System.out.println("Sending message: " + message.getClass().getSimpleName());
+        super.send(message);
+    }
+    
+    @Override
     public void messageReceived(Message message) {
+        System.out.println("Message received: " + message.getClass().getSimpleName());
         if (message instanceof AsyncableMessage && ((AsyncableMessage) message).isAsync()) {
             // async messages get their handlers called immediately
             super.messageReceived(message);
