@@ -130,14 +130,18 @@ public class PocketSession extends GlowSession {
                 pkStart.encode();
                 session.sendMessage(Reliability.RELIABLE_ORDERED, pkStart);
                 
-                FullChunkDataPacket pePacket = new FullChunkDataPacket();
-                pePacket.chunkX = 0;
-                pePacket.chunkZ = 0;
-                pePacket.payload = PocketNetworkManager.requestChunkTask(0, 0);
-                pePacket.encode();
+                for (int x = -3; 3 >= x; x++) {
+                    for (int z = -3; 3 >= z; z++) {
+                        FullChunkDataPacket pePacket = new FullChunkDataPacket();
+                        pePacket.chunkX = x;
+                        pePacket.chunkZ = z;
+                        pePacket.payload = PocketNetworkManager.requestChunkTask(x, z);
+                        pePacket.encode();
+        
+                        session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
+                    }
+                }
 
-                session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
-                
                 PlayStatusPacket pkPlay = new PlayStatusPacket();
                 pkPlay.status = PlayStatusPacket.SPAWNED;
                 pkPlay.encode();

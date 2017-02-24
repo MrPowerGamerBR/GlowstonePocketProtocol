@@ -16,6 +16,7 @@ public class ChunkRadiusUpdatedPacket extends GamePacket {
     
     @Override
     public void encode() {
+        this.writeByte(getPacketId());
         this.radius = this.readSignedVarInt();
     }
     

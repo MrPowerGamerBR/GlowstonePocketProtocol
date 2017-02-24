@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SplittableRandom;
 import java.util.UUID;
 
 import io.netty.channel.Channel;
@@ -140,6 +141,7 @@ public class PocketNetworkManager extends RakNetServer {
         byte[] data = new byte[2048];
         byte[] skyLight = new byte[2048];
         byte[] blockLight = new byte[2048];
+        SplittableRandom rand = new SplittableRandom();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 int i = (x << 7) | (z << 3);
