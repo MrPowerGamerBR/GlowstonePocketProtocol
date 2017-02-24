@@ -38,11 +38,11 @@ public class StartGamePacket extends GamePacket {
     @Override
     public void encode() {
         this.writeByte(getPacketId());
-        this.writeUnsignedVarLong(this.entityUniqueId);
-        this.writeUnsignedVarLong(this.entityRuntimeId);
+        this.writeSignedVarLong(this.entityUniqueId);
+        this.writeSignedVarLong(this.entityRuntimeId);
         this.writeVector3f(this.x, this.y, this.z);
-        this.writeFloat(90); // yaw
-        this.writeFloat(90); // pitch
+        this.writeLFloat(90); // yaw
+        this.writeLFloat(90); // pitch
         this.writeSignedVarInt(this.seed);
         this.writeSignedVarInt(this.dimension);
         this.writeSignedVarInt(this.generator);
@@ -52,8 +52,8 @@ public class StartGamePacket extends GamePacket {
         this.writeBoolean(this.hasAchievementsDisabled);
         this.writeSignedVarInt(this.dayCycleStopTime);
         this.writeBoolean(this.eduMode);
-        this.writeFloat(this.rainLevel);
-        this.writeFloat(this.lightningLevel);
+        this.writeLFloat(this.rainLevel);
+        this.writeLFloat(this.lightningLevel);
         this.writeBoolean(this.commandsEnabled);
         this.writeBoolean(this.isTexturePacksRequired);
         this.writeString(this.levelId);

@@ -45,6 +45,10 @@ public class GamePacket extends RakNetPacket {
         return VarInt.readSignedVarInt(this);
     }
 
+    public void writeLFloat(float v) {
+        this.write(net.pocketdreams.sequinland.util.nukkit.Binary.writeLFloat(v));
+    }
+    
     /**
      * Reads an unsigned VarLong
      * 
@@ -224,9 +228,9 @@ public class GamePacket extends RakNetPacket {
      */
 
     public GamePacket writeVector3f(double x, double y, double z) {
-        this.writeFloat(x);
-        this.writeFloat(y);
-        this.writeFloat(z);
+        this.writeLFloat((float) x);
+        this.writeLFloat((float) y);
+        this.writeLFloat((float) z);
         return this;
     }
     
