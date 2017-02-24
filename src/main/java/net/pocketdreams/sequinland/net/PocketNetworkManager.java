@@ -1,8 +1,14 @@
 package net.pocketdreams.sequinland.net;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import io.netty.channel.Channel;
@@ -15,15 +21,19 @@ import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
 import net.marfgamer.jraknet.client.RakNetClient;
 import net.marfgamer.jraknet.identifier.MCPEIdentifier;
+import net.marfgamer.jraknet.protocol.Reliability;
 import net.marfgamer.jraknet.server.RakNetServer;
 import net.marfgamer.jraknet.session.RakNetClientSession;
 import net.pocketdreams.sequinland.net.protocol.ProtocolInfo;
 import net.pocketdreams.sequinland.net.protocol.packets.BatchPacket;
+import net.pocketdreams.sequinland.net.protocol.packets.ChunkRadiusUpdatedPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.LoginPacket;
+import net.pocketdreams.sequinland.net.protocol.packets.RequestChunkRadiusPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
 import net.pocketdreams.sequinland.util.ReflectionUtils;
 import net.pocketdreams.sequinland.util.SequinUtils;
+import net.pocketdreams.sequinland.util.nukkit.BinaryStream;
 
 public class PocketNetworkManager extends RakNetServer {
     private final GlowServer server;
@@ -96,6 +106,11 @@ public class PocketNetworkManager extends RakNetServer {
                     pocketSession.messageReceived(pcPacket);
                     return;
                 }
+                if (pocketPacket instanceof RequestChunkRadiusPacket) {
+                    ChunkRadiusUpdatedPacket pePacket = new ChunkRadiusUpdatedPacket();
+                    pePacket.radius = 5;
+                    session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
+                }
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
                 e.printStackTrace();
             }
@@ -105,5 +120,79 @@ public class PocketNetworkManager extends RakNetServer {
     @Override
     public void onSessionException(RakNetClientSession session, Throwable throwable) {
         throwable.printStackTrace();
+    }
+
+    public static byte[] getBytes() {
+        ByteBuffer buffer = ByteBuffer.allocate(10240);
+        byte[] blocks = new byte[4096];
+        byte[] data = new byte[2048];
+        byte[] skyLight = new byte[2048];
+        byte[] blockLight = new byte[2048];
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                int i = (x << 7) | (z << 3);
+                for (int y = 0; y < 16; y += 2) {
+                    int id = 1;
+                    int id2 = 2;
+                    blocks[(i << 1) | y] = (byte) id;
+                    blocks[(i << 1) | (y + 1)] = (byte) id2;
+                    int b1 = 0;
+                    int b2 = 0;
+                    data[i | (y >> 1)] = (byte) ((b2 << 4) | b1);
+                    b1 = 15;
+                    b2 = 15;
+                    skyLight[i | (y >> 1)] = (byte) ((b2 << 4) | b1);
+                    b1 = 15;
+                    b2 = 15;
+                    blockLight[i | (y >> 1)] = (byte) ((b2 << 4) | b1);
+                }
+            }
+        }
+        return buffer
+                .put(blocks)
+                .put(data)
+                .put(skyLight)
+                .put(blockLight)
+                .array();
+    }
+    
+    public static byte[] requestChunkTask(int x, int z) {
+        System.out.println("Chunk requested!");
+        byte[] blockEntities = new byte[0];
+
+        Map<Integer, Integer> extra = new HashMap<>();
+        BinaryStream extraData;
+        if (!extra.isEmpty()) {
+            extraData = new BinaryStream();
+            extraData.putVarInt(extra.size());
+            for (Map.Entry<Integer, Integer> entry : extra.entrySet()) {
+                extraData.putVarInt(entry.getKey());
+                extraData.putLShort(entry.getValue());
+            }
+        } else {
+            extraData = null;
+        }
+
+        BinaryStream stream = new BinaryStream();
+        int count = 16;
+        stream.putByte((byte) count);
+        for (int i = 0; i < count; i++) {
+            stream.putByte((byte) 0);
+            stream.put(getBytes());
+        }
+        for (int height : new byte[256]) {
+            stream.putByte((byte) height);
+        }
+        stream.put(new byte[256]);
+        stream.put(new byte[256]);
+        stream.putByte((byte) 0);
+        if (extraData != null) {
+            stream.put(extraData.getBuffer());
+        } else {
+            stream.putVarInt(0);
+        }
+        stream.put(blockEntities);
+
+        return stream.getBuffer();
     }
 }

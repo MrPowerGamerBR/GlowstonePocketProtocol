@@ -1,6 +1,8 @@
 package net.pocketdreams.sequinland.net;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.flowpowered.network.ConnectionManager;
 import com.flowpowered.network.Message;
@@ -11,6 +13,7 @@ import net.glowstone.net.GlowSession;
 import net.glowstone.net.message.SetCompressionMessage;
 import net.glowstone.net.message.login.LoginSuccessMessage;
 import net.glowstone.net.message.play.game.ChatMessage;
+import net.glowstone.net.message.play.game.ChunkDataMessage;
 import net.glowstone.net.message.play.game.JoinGameMessage;
 import net.glowstone.net.message.play.game.PositionRotationMessage;
 import net.glowstone.net.protocol.GlowProtocol;
@@ -19,12 +22,14 @@ import net.glowstone.util.TextMessage;
 import net.marfgamer.jraknet.protocol.Reliability;
 import net.marfgamer.jraknet.session.RakNetClientSession;
 import net.pocketdreams.sequinland.net.protocol.packets.AvailableCommandsPacket;
+import net.pocketdreams.sequinland.net.protocol.packets.FullChunkDataPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.PlayStatusPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.ResourcePacksInfoPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.SetCommandsEnabledPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.StartGamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
 import net.pocketdreams.sequinland.util.MessageUtils;
+import net.pocketdreams.sequinland.util.nukkit.BinaryStream;
 
 /**
  * A single pocket connection to the server
@@ -38,11 +43,43 @@ public class PocketSession extends GlowSession {
     }
 
     private JoinGameMessage stored;
+    private ArrayList<FullChunkDataPacket> delayed = new ArrayList<FullChunkDataPacket>();
     
     @Override
     public void send(Message message) {
         // TODO: Better message translator, come on, look at this mess!
         System.out.println("Sending " + message.getClass().getSimpleName() + " to client!");
+        if (message instanceof ChunkDataMessage) {
+            /* ChunkDataMessage pcPacket = (ChunkDataMessage) message;
+            FullChunkDataPacket pePacket = new FullChunkDataPacket();
+            pePacket.chunkX = pcPacket.getX();
+            pePacket.chunkZ = pcPacket.getZ();
+            BinaryStream stream = new BinaryStream();
+            stream.putUnsignedVarInt(16); // 16 chunk sections
+            int idx = 0;
+            while (16 > idx) {
+                stream.putByte((byte) 0); // Storage
+                stream.put(new byte[4096]); // ids
+                stream.put(new byte[2048]); // metas
+                stream.put(new byte[2048]); // sky light
+                stream.put(new byte[2048]); // block light
+                idx++;
+            }
+            stream.put(new byte[256]); // height
+            stream.put(new byte[256]); // biome
+            stream.putVarInt(0); // extra data
+            stream.put(new byte[0]); // block entities
+            pePacket.payload = stream.getBuffer();
+            pePacket.encode();
+            if (stored != null) {
+                // woo chunks
+                delayed.add(pePacket);
+                return;
+            } else {
+                session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
+                return;
+            } */
+        }
         if (message instanceof ChatMessage) {
             ChatMessage pcPacket = (ChatMessage) message;
             TextPacket pkText = new TextPacket();
@@ -75,9 +112,9 @@ public class PocketSession extends GlowSession {
                 JoinGameMessage joinPacket = stored;
                 PositionRotationMessage posPacket = (PositionRotationMessage) message;
                 StartGamePacket pkStart = new StartGamePacket();
-                pkStart.x = (float) posPacket.getX();
-                pkStart.y = (float) posPacket.getY();
-                pkStart.z = (float) posPacket.getZ();
+                pkStart.x = 0;
+                pkStart.y = 70;
+                pkStart.z = 0;
                 pkStart.commandsEnabled = true;
                 pkStart.dayCycleStopTime = 0;
                 pkStart.difficulty = joinPacket.getDifficulty();
@@ -92,6 +129,14 @@ public class PocketSession extends GlowSession {
                 pkStart.worldName = "Shantae is cute"; // The client doesn't care about the world name anyway
                 pkStart.encode();
                 session.sendMessage(Reliability.RELIABLE_ORDERED, pkStart);
+                
+                FullChunkDataPacket pePacket = new FullChunkDataPacket();
+                pePacket.chunkX = 0;
+                pePacket.chunkZ = 0;
+                pePacket.payload = PocketNetworkManager.requestChunkTask(0, 0);
+                pePacket.encode();
+
+                session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
                 
                 PlayStatusPacket pkPlay = new PlayStatusPacket();
                 pkPlay.status = PlayStatusPacket.SPAWNED;
