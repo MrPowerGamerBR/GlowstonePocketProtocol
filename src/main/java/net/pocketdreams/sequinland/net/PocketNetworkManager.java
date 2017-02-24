@@ -65,6 +65,7 @@ public class PocketNetworkManager extends RakNetServer {
     public void onClientDisconnect(RakNetClientSession session, String reason) {
         PocketSession pocketSession = sessions.get(session);
         pocketSession.disconnect(reason);
+        server.getSessionRegistry().remove(pocketSession);
         sessions.remove(pocketSession);
     }
     
