@@ -29,6 +29,7 @@ import net.pocketdreams.sequinland.net.protocol.packets.SetCommandsEnabledPacket
 import net.pocketdreams.sequinland.net.protocol.packets.StartGamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
 import net.pocketdreams.sequinland.util.MessageUtils;
+import net.pocketdreams.sequinland.util.PocketChunkUtils;
 import net.pocketdreams.sequinland.util.nukkit.BinaryStream;
 
 /**
@@ -36,7 +37,7 @@ import net.pocketdreams.sequinland.util.nukkit.BinaryStream;
  */
 public class PocketSession extends GlowSession {
     private RakNetClientSession session;
-    
+
     public PocketSession(GlowServer server, Channel channel, ConnectionManager connectionManager, RakNetClientSession session) {
         super(server, channel, connectionManager);
         this.session = session;
@@ -44,41 +45,24 @@ public class PocketSession extends GlowSession {
 
     private JoinGameMessage stored;
     private ArrayList<FullChunkDataPacket> delayed = new ArrayList<FullChunkDataPacket>();
-    
+
     @Override
     public void send(Message message) {
         // TODO: Better message translator, come on, look at this mess!
         System.out.println("Sending " + message.getClass().getSimpleName() + " to client!");
         if (message instanceof ChunkDataMessage) {
-            /* ChunkDataMessage pcPacket = (ChunkDataMessage) message;
+            ChunkDataMessage pcPacket = (ChunkDataMessage) message;
             FullChunkDataPacket pePacket = new FullChunkDataPacket();
-            pePacket.chunkX = pcPacket.getX();
-            pePacket.chunkZ = pcPacket.getZ();
-            BinaryStream stream = new BinaryStream();
-            stream.putUnsignedVarInt(16); // 16 chunk sections
-            int idx = 0;
-            while (16 > idx) {
-                stream.putByte((byte) 0); // Storage
-                stream.put(new byte[4096]); // ids
-                stream.put(new byte[2048]); // metas
-                stream.put(new byte[2048]); // sky light
-                stream.put(new byte[2048]); // block light
-                idx++;
-            }
-            stream.put(new byte[256]); // height
-            stream.put(new byte[256]); // biome
-            stream.putVarInt(0); // extra data
-            stream.put(new byte[0]); // block entities
-            pePacket.payload = stream.getBuffer();
+            pePacket.chunkX = 0;
+            pePacket.chunkZ = 0;
+            pePacket.payload = PocketChunkUtils.translateToPocket(pcPacket.getChunk());
             pePacket.encode();
             if (stored != null) {
-                // woo chunks
                 delayed.add(pePacket);
-                return;
             } else {
                 session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
-                return;
-            } */
+            }
+            return;
         }
         if (message instanceof ChatMessage) {
             ChatMessage pcPacket = (ChatMessage) message;
@@ -94,7 +78,7 @@ public class PocketSession extends GlowSession {
             pkPlay.status = PlayStatusPacket.OK;
             pkPlay.encode();
             session.sendMessage(Reliability.RELIABLE_ORDERED, pkPlay);
-            
+
             ResourcePacksInfoPacket pkRp = new ResourcePacksInfoPacket();
             pkRp.encode();
             session.sendMessage(Reliability.RELIABLE_ORDERED, pkRp);
@@ -129,25 +113,33 @@ public class PocketSession extends GlowSession {
                 pkStart.worldName = "Shantae is cute"; // The client doesn't care about the world name anyway
                 pkStart.encode();
                 session.sendMessage(Reliability.RELIABLE_ORDERED, pkStart);
-                
+
+                // Fill the spawn position with... nothingness
                 for (int x = -3; 3 >= x; x++) {
                     for (int z = -3; 3 >= z; z++) {
+                        if (x == 0 && z == 0) {
+                            continue;
+                        }
                         FullChunkDataPacket pePacket = new FullChunkDataPacket();
                         pePacket.chunkX = x;
                         pePacket.chunkZ = z;
-                        pePacket.payload = PocketNetworkManager.requestChunkTask(x, z);
+                        pePacket.payload = PocketChunkUtils.requestEmptyChunk();
                         pePacket.encode();
-        
+
                         session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
                     }
                 }
 
+                for (FullChunkDataPacket f : delayed) {
+                    session.sendMessage(Reliability.RELIABLE_ORDERED, f);
+                }
+                delayed.clear();
                 PlayStatusPacket pkPlay = new PlayStatusPacket();
                 pkPlay.status = PlayStatusPacket.SPAWNED;
                 pkPlay.encode();
                 session.sendMessage(Reliability.RELIABLE_ORDERED, pkPlay);
                 stored = null;
-                
+
                 SetCommandsEnabledPacket enableCommandsPk = new SetCommandsEnabledPacket();
                 enableCommandsPk.enabled = true;
                 enableCommandsPk.encode();
@@ -162,12 +154,12 @@ public class PocketSession extends GlowSession {
         }
         return;
     }
-    
+
     @Override
     public void messageReceived(Message message) {
         super.messageReceived(message);
     }
-    
+
     @Override
     public void setProtocol(ProtocolType protocol) {
         getChannel().flush();
@@ -176,12 +168,12 @@ public class PocketSession extends GlowSession {
         // updatePipeline("codecs", new CodecsHandler(proto));
         setProtocol(proto);
     }
-    
+
     @Override
     public InetSocketAddress getAddress() {
         return session.getAddress();
     }
-    
+
     @Override
     public void enableCompression(int threshold) {
         // set compression can only be sent once
