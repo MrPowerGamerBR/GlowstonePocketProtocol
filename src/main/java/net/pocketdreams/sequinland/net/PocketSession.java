@@ -53,8 +53,8 @@ public class PocketSession extends GlowSession {
         if (message instanceof ChunkDataMessage) {
             ChunkDataMessage pcPacket = (ChunkDataMessage) message;
             FullChunkDataPacket pePacket = new FullChunkDataPacket();
-            pePacket.chunkX = 0;
-            pePacket.chunkZ = 0;
+            pePacket.chunkX = pcPacket.getX();
+            pePacket.chunkZ = pcPacket.getZ();
             pePacket.payload = PocketChunkUtils.translateToPocket(pcPacket.getChunk());
             pePacket.encode();
             if (stored != null) {
@@ -96,9 +96,9 @@ public class PocketSession extends GlowSession {
                 JoinGameMessage joinPacket = stored;
                 PositionRotationMessage posPacket = (PositionRotationMessage) message;
                 StartGamePacket pkStart = new StartGamePacket();
-                pkStart.x = 0;
-                pkStart.y = 70;
-                pkStart.z = 0;
+                pkStart.x = (float) posPacket.getX();
+                pkStart.y = (float) posPacket.getY();
+                pkStart.z = (float) posPacket.getZ();
                 pkStart.commandsEnabled = true;
                 pkStart.dayCycleStopTime = 0;
                 pkStart.difficulty = joinPacket.getDifficulty();
