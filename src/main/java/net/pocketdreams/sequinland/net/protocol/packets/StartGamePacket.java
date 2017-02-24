@@ -41,8 +41,8 @@ public class StartGamePacket extends GamePacket {
         this.writeUnsignedVarLong(this.entityUniqueId);
         this.writeUnsignedVarLong(this.entityRuntimeId);
         this.writeVector3f(this.x, this.y, this.z);
-        this.writeFloat(0);
-        this.writeFloat(0);
+        this.writeFloat(90); // yaw
+        this.writeFloat(90); // pitch
         this.writeSignedVarInt(this.seed);
         this.writeSignedVarInt(this.dimension);
         this.writeSignedVarInt(this.generator);

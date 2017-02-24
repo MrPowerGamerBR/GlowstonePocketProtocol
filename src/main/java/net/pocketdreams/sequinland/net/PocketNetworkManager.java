@@ -70,6 +70,12 @@ public class PocketNetworkManager extends RakNetServer {
         }
     }
     
+    @Override
+    public void onClientDisconnect(RakNetClientSession session, String reason) {
+        PocketSession pocketSession = sessions.get(session);
+        pocketSession.disconnect(reason);
+    }
+    
     public static void handleRakNetPacket(RakNetClientSession session, RakNetPacket packet) {
         short id = packet.readUByte();
         

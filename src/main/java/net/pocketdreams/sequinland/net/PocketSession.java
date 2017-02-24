@@ -122,7 +122,7 @@ public class PocketSession extends GlowSession {
                 pkStart.eduMode = false;
                 pkStart.entityRuntimeId = joinPacket.getId();
                 pkStart.entityUniqueId = joinPacket.getId();
-                pkStart.gamemode = joinPacket.getMode();
+                pkStart.gamemode = 1; // Default to creative
                 pkStart.spawnX = 0;
                 pkStart.spawnY = 70;
                 pkStart.spawnZ = 0;
