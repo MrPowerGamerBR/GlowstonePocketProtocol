@@ -102,6 +102,11 @@ public class PocketNetworkManager extends RakNetServer {
                 }
                 if (pocketPacket instanceof TextPacket) {
                     TextPacket pePacket = (TextPacket) pocketPacket;
+                    if (pePacket.message.startsWith("!")) {
+                        // Remember the super workaround from the pre-0.16 days?
+                        // Well, it is back since I'm dumb and I'm lazy to properly implement the available commands packet!
+                        pePacket.message = pePacket.message.replaceFirst("!", "/");
+                    }
                     IncomingChatMessage pcPacket = new IncomingChatMessage(pePacket.message);
                     pocketSession.messageReceived(pcPacket);
                     return;
@@ -132,7 +137,7 @@ public class PocketNetworkManager extends RakNetServer {
             for (int z = 0; z < 16; z++) {
                 int i = (x << 7) | (z << 3);
                 for (int y = 0; y < 16; y += 2) {
-                    int id = 1;
+                    int id = 2;
                     int id2 = 2;
                     blocks[(i << 1) | y] = (byte) id;
                     blocks[(i << 1) | (y + 1)] = (byte) id2;
