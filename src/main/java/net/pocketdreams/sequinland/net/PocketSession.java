@@ -10,6 +10,7 @@ import net.glowstone.net.GlowSession;
 import net.glowstone.net.message.SetCompressionMessage;
 import net.glowstone.net.message.login.EncryptionKeyRequestMessage;
 import net.glowstone.net.message.login.LoginStartMessage;
+import net.glowstone.net.message.login.LoginSuccessMessage;
 import net.glowstone.net.message.play.game.ChatMessage;
 import net.glowstone.net.message.play.game.ChunkDataMessage;
 import net.glowstone.net.message.play.game.JoinGameMessage;
@@ -81,7 +82,7 @@ public class PocketSession extends GlowSession {
             
             if (stored != null) {                
                 // We are going to start the game then.
-            	PlayStatusPacket pkPlay = new PlayStatusPacket();
+            	/*PlayStatusPacket pkPlay = new PlayStatusPacket();
                 pkPlay.status = PlayStatusPacket.OK;
                 pkPlay.encode();
                 session.sendMessage(Reliability.RELIABLE_ORDERED, pkPlay);
@@ -89,7 +90,7 @@ public class PocketSession extends GlowSession {
                 ResourcePacksInfoPacket pkRp = new ResourcePacksInfoPacket();
                 pkRp.mustAccept = false;
                 pkRp.encode();
-                session.sendMessage(Reliability.RELIABLE_ORDERED, pkRp);
+                session.sendMessage(Reliability.RELIABLE_ORDERED, pkRp);*/
             	
                 //PositionRotationMessage posPacket = (PositionRotationMessage) message;
                 StartGamePacket pkStart = new StartGamePacket();
@@ -101,8 +102,8 @@ public class PocketSession extends GlowSession {
                 pkStart.difficulty = stored.getDifficulty();
                 pkStart.dimension = (byte) stored.getDimension();
                 pkStart.eduMode = false;
-                pkStart.entityRuntimeId = joinPacket.getId();
-                pkStart.entityUniqueId = joinPacket.getId();
+                pkStart.entityRuntimeId = ((JoinGameMessage) message).getId();
+                pkStart.entityUniqueId = ((JoinGameMessage) message).getId();
                 pkStart.gamemode = 1; // Default to creative
                 pkStart.spawnX = 0;
                 pkStart.spawnY = 128; //center of world
