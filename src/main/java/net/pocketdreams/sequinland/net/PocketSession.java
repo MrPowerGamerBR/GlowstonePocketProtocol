@@ -2,8 +2,6 @@ package net.pocketdreams.sequinland.net;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import com.flowpowered.network.ConnectionManager;
 import com.flowpowered.network.Message;
 
@@ -18,7 +16,6 @@ import net.glowstone.net.message.play.game.JoinGameMessage;
 import net.glowstone.net.message.play.game.PositionRotationMessage;
 import net.glowstone.net.protocol.GlowProtocol;
 import net.glowstone.net.protocol.ProtocolType;
-import net.glowstone.util.TextMessage;
 import net.marfgamer.jraknet.protocol.Reliability;
 import net.marfgamer.jraknet.session.RakNetClientSession;
 import net.pocketdreams.sequinland.net.protocol.packets.AvailableCommandsPacket;
@@ -30,7 +27,7 @@ import net.pocketdreams.sequinland.net.protocol.packets.StartGamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
 import net.pocketdreams.sequinland.util.MessageUtils;
 import net.pocketdreams.sequinland.util.PocketChunkUtils;
-import net.pocketdreams.sequinland.util.nukkit.BinaryStream;
+import net.pocketdreams.sequinland.util.SequinUtils;
 
 /**
  * A single pocket connection to the server
@@ -45,7 +42,8 @@ public class PocketSession extends GlowSession {
 
     private JoinGameMessage stored;
     private ArrayList<FullChunkDataPacket> delayed = new ArrayList<FullChunkDataPacket>();
-
+    private ArrayList<FullChunkDataPacket> dataPacket = new ArrayList<FullChunkDataPacket>();
+    
     @Override
     public void send(Message message) {
         // TODO: Better message translator, come on, look at this mess!
@@ -58,7 +56,8 @@ public class PocketSession extends GlowSession {
             pePacket.payload = PocketChunkUtils.translateToPocket(pcPacket.getChunk());
             pePacket.encode();
             if (stored != null) {
-                delayed.add(pePacket);
+                // delayed.add(pePacket);
+                dataPacket.add(pePacket);
             } else {
                 session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
             }
@@ -130,9 +129,10 @@ public class PocketSession extends GlowSession {
                     }
                 }
 
-                for (FullChunkDataPacket f : delayed) {
-                    session.sendMessage(Reliability.RELIABLE_ORDERED, f);
-                }
+                // for (FullChunkDataPacket f : delayed) {
+                //     session.sendMessage(Reliability.RELIABLE_ORDERED, f);
+                // }
+                SequinUtils.batchPackets(session, delayed.toArray(new FullChunkDataPacket[0]));
                 delayed.clear();
                 PlayStatusPacket pkPlay = new PlayStatusPacket();
                 pkPlay.status = PlayStatusPacket.SPAWNED;

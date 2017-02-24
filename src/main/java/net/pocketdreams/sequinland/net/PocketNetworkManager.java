@@ -1,26 +1,17 @@
 package net.pocketdreams.sequinland.net;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SplittableRandom;
 import java.util.UUID;
 
 import io.netty.channel.Channel;
 import net.glowstone.GlowServer;
 import net.glowstone.net.message.handshake.HandshakeMessage;
 import net.glowstone.net.message.login.LoginStartMessage;
-import net.glowstone.net.message.play.game.ChatMessage;
 import net.glowstone.net.message.play.game.IncomingChatMessage;
 import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
-import net.marfgamer.jraknet.client.RakNetClient;
 import net.marfgamer.jraknet.identifier.MCPEIdentifier;
 import net.marfgamer.jraknet.protocol.Reliability;
 import net.marfgamer.jraknet.server.RakNetServer;
@@ -34,7 +25,6 @@ import net.pocketdreams.sequinland.net.protocol.packets.RequestChunkRadiusPacket
 import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
 import net.pocketdreams.sequinland.util.ReflectionUtils;
 import net.pocketdreams.sequinland.util.SequinUtils;
-import net.pocketdreams.sequinland.util.nukkit.BinaryStream;
 
 public class PocketNetworkManager extends RakNetServer {
     private final GlowServer server;

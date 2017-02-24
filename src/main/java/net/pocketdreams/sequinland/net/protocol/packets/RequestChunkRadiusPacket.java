@@ -10,6 +10,10 @@ public class RequestChunkRadiusPacket extends GamePacket {
         super(packet);
     }
     
+    public RequestChunkRadiusPacket() {
+        super();
+    }
+    
     @Override
     public void decode() {
         this.radius = this.readSignedVarInt();
