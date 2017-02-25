@@ -25,7 +25,6 @@ import net.pocketdreams.sequinland.net.protocol.packets.ResourcePacksInfoPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.SetCommandsEnabledPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.StartGamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
-import net.pocketdreams.sequinland.util.MessageUtils;
 import net.pocketdreams.sequinland.util.PocketChunkUtils;
 import net.pocketdreams.sequinland.util.SequinUtils;
 
@@ -66,7 +65,7 @@ public class PocketSession extends GlowSession {
         if (message instanceof ChatMessage) {
             ChatMessage pcPacket = (ChatMessage) message;
             TextPacket pkText = new TextPacket();
-            pkText.message = MessageUtils.translate(pcPacket.getText().encode());
+            pkText.message = pcPacket.getText().flatten();
             pkText.type = TextPacket.TYPE_SYSTEM;
             pkText.encode();
             session.sendMessage(Reliability.RELIABLE, pkText);

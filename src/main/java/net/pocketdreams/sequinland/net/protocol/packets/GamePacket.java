@@ -1,5 +1,7 @@
 package net.pocketdreams.sequinland.net.protocol.packets;
 
+import java.nio.charset.StandardCharsets;
+
 import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
 import net.marfgamer.jraknet.protocol.Reliability;
@@ -304,7 +306,8 @@ public class GamePacket extends RakNetPacket {
      * @return The packet
      */
     public GamePacket writeVarString(String s) {
-        this.writeByteArray(s.getBytes());
+        byte[] b = s.getBytes(StandardCharsets.UTF_8);
+        this.writeByteArray(b);
         return this;
     }
 
