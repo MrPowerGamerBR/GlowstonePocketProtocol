@@ -2,6 +2,7 @@ package net.pocketdreams.sequinland.net.protocol.packets;
 
 import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
+import net.marfgamer.jraknet.protocol.Reliability;
 import net.pocketdreams.sequinland.util.VarInt;
 
 /**
@@ -10,7 +11,8 @@ import net.pocketdreams.sequinland.util.VarInt;
  * @author MarfGamer
  */
 public class GamePacket extends RakNetPacket {
-
+    public Reliability reliability = Reliability.RELIABLE_ORDERED;
+    
     public GamePacket() {
         super(0xFE);
     }
