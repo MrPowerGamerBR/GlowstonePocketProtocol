@@ -96,7 +96,7 @@ public class PocketSession extends GlowSession {
                 PositionRotationMessage posPacket = (PositionRotationMessage) message;
                 StartGamePacket pkStart = new StartGamePacket();
                 pkStart.x = (float) posPacket.getX();
-                pkStart.y = (float) posPacket.getY();
+                pkStart.y = (float) posPacket.getY() + 1.62F;
                 pkStart.z = (float) posPacket.getZ();
                 pkStart.commandsEnabled = true;
                 pkStart.dayCycleStopTime = 0;
@@ -182,5 +182,9 @@ public class PocketSession extends GlowSession {
             // updatePipeline("compression", new CompressionHandler(threshold));
             compresssionSent = true;
         }
+    }
+    
+    public RakNetClientSession getRakNetSession() {
+        return session;
     }
 }

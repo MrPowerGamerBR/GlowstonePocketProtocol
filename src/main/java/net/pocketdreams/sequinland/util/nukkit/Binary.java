@@ -1,10 +1,10 @@
 package net.pocketdreams.sequinland.util.nukkit;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.UUID;
+
+import net.pocketdreams.sequinland.util.NukkitMath;
 
 /**
  * author: MagicDroidX
@@ -152,6 +152,15 @@ public class Binary {
         return writeLInt(Float.floatToIntBits(f));
     }
 
+    public static float readLFloat(byte[] bytes, int accuracy) {
+        float val = Float.intBitsToFloat(readLInt(bytes));
+        if (accuracy > -1) {
+            return (float) NukkitMath.round(val, accuracy);
+        } else {
+            return val;
+        }
+    }
+    
     public static double readDouble(byte[] bytes) {
         return Double.longBitsToDouble(readLong(bytes));
     }

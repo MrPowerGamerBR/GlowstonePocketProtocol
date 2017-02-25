@@ -4,6 +4,10 @@ import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
 import net.marfgamer.jraknet.protocol.Reliability;
 import net.pocketdreams.sequinland.util.VarInt;
+import net.pocketdreams.sequinland.util.nukkit.Vector2;
+import net.pocketdreams.sequinland.util.nukkit.Vector2f;
+import net.pocketdreams.sequinland.util.nukkit.Vector3;
+import net.pocketdreams.sequinland.util.nukkit.Vector3f;
 
 /**
  * A packet meant for Minecraft: Pocket Edition
@@ -12,11 +16,11 @@ import net.pocketdreams.sequinland.util.VarInt;
  */
 public class GamePacket extends RakNetPacket {
     public Reliability reliability = Reliability.RELIABLE_ORDERED;
-    
+
     public GamePacket() {
         super(0xFE);
     }
-    
+
     public GamePacket(int id) {
         super(id);
     }
@@ -50,7 +54,11 @@ public class GamePacket extends RakNetPacket {
     public void writeLFloat(float v) {
         this.write(net.pocketdreams.sequinland.util.nukkit.Binary.writeLFloat(v));
     }
-    
+
+    public float readLFloat() {
+        return net.pocketdreams.sequinland.util.nukkit.Binary.readLFloat(this.read(4), -1);
+    }
+
     /**
      * Reads an unsigned VarLong
      * 
@@ -74,43 +82,49 @@ public class GamePacket extends RakNetPacket {
      * 
      * @return A vector of 2 floats
      */
-    /* public Vector2f readVector2f() {
+    public Vector2f readVector2f() {
         float x = this.readFloat();
         float y = this.readFloat();
         return new Vector2f(x, y);
-    } */
+    }
 
     /**
      * Reads a vector of 2 integers
      * 
      * @return A vector of 2 integers
      */
-    /*
-     * public Vector2i readVector2i() { int x = this.readInt(); int y =
-     * this.readInt(); return new Vector2i(x, y); }
-     */
+    public Vector2 readVector2i() {
+        int x = this.readInt();
+        int y = this.readInt();
+        return new Vector2(x, y);
+    }
+
 
     /**
      * Reads a vector of 3 floats
      * 
      * @return A vector of 3 floats
      */
-    /* public Vector3f readVector3f() {
+    public Vector3f readVector3f() {
         float x = this.readFloat();
         float y = this.readFloat();
         float z = this.readFloat();
         return new Vector3f(x, y, z);
-    } */
+    }
 
     /**
      * Reads a vector of 3 integers
      * 
      * @return A vector of 3 integers
      */
-    /*
-     * public Vector3i readVector3i() { int x = this.readInt(); int y =
-     * this.readInt(); int z = this.readInt(); return new Vector3i(x, y, z); }
-     */
+
+    public Vector3 readVector3i() {
+        int x = this.readInt();
+        int y = this.readInt();
+        int z = this.readInt();
+        return new Vector3(x, y, z);
+    }
+
 
     /**
      * Reads a block location
@@ -235,7 +249,7 @@ public class GamePacket extends RakNetPacket {
         this.writeLFloat((float) z);
         return this;
     }
-    
+
     public void writeBlockCoords(int x, int y, int z) {
         this.writeSignedVarInt(x);
         this.writeUnsignedVarInt(y);
@@ -326,7 +340,7 @@ public class GamePacket extends RakNetPacket {
     public void decode() {
         throw new UnsupportedOperationException();
     }
-    
+
     public short getPacketId() {
         throw new UnsupportedOperationException();
     }

@@ -5,26 +5,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.flowpowered.network.Message;
+
 import io.netty.channel.Channel;
 import net.glowstone.GlowServer;
-import net.glowstone.net.message.handshake.HandshakeMessage;
-import net.glowstone.net.message.login.LoginStartMessage;
-import net.glowstone.net.message.play.game.IncomingChatMessage;
 import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
 import net.marfgamer.jraknet.identifier.MCPEIdentifier;
-import net.marfgamer.jraknet.protocol.Reliability;
 import net.marfgamer.jraknet.server.RakNetServer;
 import net.marfgamer.jraknet.session.RakNetClientSession;
 import net.pocketdreams.sequinland.net.protocol.ProtocolInfo;
-import net.pocketdreams.sequinland.net.protocol.packets.BatchPacket;
-import net.pocketdreams.sequinland.net.protocol.packets.ChunkRadiusUpdatedPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
-import net.pocketdreams.sequinland.net.protocol.packets.LoginPacket;
-import net.pocketdreams.sequinland.net.protocol.packets.RequestChunkRadiusPacket;
-import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
+import net.pocketdreams.sequinland.net.translator.PEToPCTranslator;
+import net.pocketdreams.sequinland.net.translator.TranslatorRegistry;
 import net.pocketdreams.sequinland.util.ReflectionUtils;
-import net.pocketdreams.sequinland.util.SequinUtils;
 
 public class PocketNetworkManager extends RakNetServer {
     private final GlowServer server;
@@ -85,35 +79,17 @@ public class PocketNetworkManager extends RakNetServer {
                 
                 PocketSession pocketSession = sessions.get(session);
                 
-                // TODO: Better translator system
-                if (pocketPacket instanceof BatchPacket) {
-                    SequinUtils.processBatch((BatchPacket) pocketPacket, session);
-                    return;
-                }
-                if (pocketPacket instanceof LoginPacket) {
-                    // TODO: Decode the login chain data
-                    HandshakeMessage handshake = new HandshakeMessage(316, "127.0.0.1", 25565, 2);
-                    pocketSession.messageReceived(handshake);
-                    
-                    LoginStartMessage login = new LoginStartMessage("Shantae");
-                    pocketSession.messageReceived(login);
-                    return;
-                }
-                if (pocketPacket instanceof TextPacket) {
-                    TextPacket pePacket = (TextPacket) pocketPacket;
-                    if (pePacket.message.startsWith("!")) {
-                        // Remember the super workaround from the pre-0.16 days?
-                        // Well, it is back since I'm dumb and I'm lazy to properly implement the available commands packet!
-                        pePacket.message = pePacket.message.replaceFirst("!", "/");
+                PEToPCTranslator<GamePacket> translator = TranslatorRegistry.PE_TO_PC_TRANSLATORS.get(pocketPacket.getClass());
+                
+                if (translator != null) {
+                    System.out.println("Using translator " + translator.getClass().getSimpleName());
+                    Message[] messages = translator.translate(pocketSession, pocketPacket);
+                    for (Message message : messages) {
+                        pocketSession.messageReceived(message);
                     }
-                    IncomingChatMessage pcPacket = new IncomingChatMessage(pePacket.message);
-                    pocketSession.messageReceived(pcPacket);
                     return;
-                }
-                if (pocketPacket instanceof RequestChunkRadiusPacket) {
-                    ChunkRadiusUpdatedPacket pePacket = new ChunkRadiusUpdatedPacket();
-                    pePacket.radius = 5;
-                    session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
+                } else {
+                    System.out.println("No valid translator found for " + pocketPacket.getClass().getSimpleName());
                 }
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
                 e.printStackTrace();
