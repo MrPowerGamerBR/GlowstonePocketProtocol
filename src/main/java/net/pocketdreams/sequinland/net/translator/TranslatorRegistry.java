@@ -1,6 +1,8 @@
 package net.pocketdreams.sequinland.net.translator;
 
 import com.flowpowered.network.Message;
+import net.glowstone.GlowServer;
+import net.glowstone.net.GlowSession;
 import net.glowstone.net.message.KickMessage;
 import net.glowstone.net.message.SetCompressionMessage;
 import net.glowstone.net.message.handshake.HandshakeMessage;
@@ -106,6 +108,7 @@ import net.glowstone.net.message.status.StatusPingMessage;
 import net.glowstone.net.message.status.StatusRequestMessage;
 import net.glowstone.net.message.status.StatusResponseMessage;
 import net.marfgamer.jraknet.RakNetPacket;
+import net.pocketdreams.sequinland.net.PocketSession;
 import net.pocketdreams.sequinland.net.protocol.packets.BatchPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.LoginPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.MovePlayerPacket;
@@ -119,6 +122,7 @@ import net.pocketdreams.sequinland.net.translator.pocket.PERequestChunkRadiusPac
 import net.pocketdreams.sequinland.net.translator.pocket.PETextPacketTranslator;
 
 import java.util.HashMap;
+import java.util.logging.Level;
 
 /**
  * Created by daporkchop on 25.02.17.
@@ -137,15 +141,13 @@ public final class TranslatorRegistry {
 
     static {
         // -----=====≡≡≡≡≡ BEGIN NOTCHIAN TO POCKET ≡≡≡≡≡=====-----
-
-        // Handshake
-        PC_TO_PE_TRANSLATORS.put(HandshakeMessage.class, new IgnorePacketTranslator());
+        //We only want to list outbound packets here
 
         // Login
         PC_TO_PE_TRANSLATORS.put(EncryptionKeyRequestMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(EncryptionKeyResponseMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(LoginStartMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(LoginSuccessMessage.class, new IgnorePacketTranslator());
+        PC_TO_PE_TRANSLATORS.put(KickMessage.class, new IgnorePacketTranslator());
+        PC_TO_PE_TRANSLATORS.put(SetCompressionMessage.class, new IgnorePacketTranslator());
 
         // --== Begin play packets ==--
 
@@ -174,26 +176,21 @@ public final class TranslatorRegistry {
         PC_TO_PE_TRANSLATORS.put(SpawnPaintingMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(SpawnPlayerMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(SpawnXpOrbMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(VehicleMoveMessage.class, new IgnorePacketTranslator());
 
         // Game
         PC_TO_PE_TRANSLATORS.put(BlockActionMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(BlockChangeMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(ChatMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(ChunkDataMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(ClientSettingsMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(ExperienceMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(ExplosionMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(HealthMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(IncomingChatMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(JoinGameMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(MapDataMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(MultiBlockChangeMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(NamedSoundEffectMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(PingMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(PlayEffectMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(PlayParticleMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(PluginMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(PositionRotationMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(RespawnMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(SignEditorMessage.class, new IgnorePacketTranslator());
@@ -205,46 +202,23 @@ public final class TranslatorRegistry {
         PC_TO_PE_TRANSLATORS.put(TitleMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(UnloadChunkMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(UpdateBlockEntityMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(UpdateSignMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(UserListHeaderFooterMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(UserListItemMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(WorldBorderMessage.class, new IgnorePacketTranslator());
 
         // Inventory
-        PC_TO_PE_TRANSLATORS.put(CloseWindowMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(CreativeItemMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(EnchantItemMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(HeldItemMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(OpenWindowMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(SetWindowContentsMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(SetWindowSlotMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(TransactionMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(WindowClickMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(WindowPropertyMessage.class, new IgnorePacketTranslator());
 
         // Player
-        PC_TO_PE_TRANSLATORS.put(BlockPlacementMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(BossBarMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(CameraMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(ClientStatusMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(CombatEventMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(DiggingMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(InteractEntityMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(PlayerAbilitiesMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(PlayerActionMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(PlayerLookMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(PlayerPositionLookMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(PlayerPositionMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(PlayerSwingArmMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(PlayerUpdateMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(ResourcePackSendMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(ResourcePackStatusMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(ServerDifficultyMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(SpectateMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(SteerVehicleMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(TabCompleteMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(TabCompleteResponseMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(TeleportConfirmMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(UseBedMessage.class, new IgnorePacketTranslator());
 
         // Scoreboard
@@ -260,11 +234,6 @@ public final class TranslatorRegistry {
         PC_TO_PE_TRANSLATORS.put(StatusRequestMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(StatusResponseMessage.class, new IgnorePacketTranslator());
 
-        // Misc
-        PC_TO_PE_TRANSLATORS.put(KickMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(SetCompressionMessage.class, new IgnorePacketTranslator());
-
-        //TODO: remove client -> server packets from PC to PE translators
         // -----=====≡≡≡≡≡ END NOTCHIAN TO POCKET ≡≡≡≡≡=====-----
 
         // -----=====≡≡≡≡≡ BEGIN POCKET TO NOTCHIAN ≡≡≡≡≡=====-----
@@ -277,5 +246,39 @@ public final class TranslatorRegistry {
         // -----=====≡≡≡≡≡ END POCKET TO NOTCHIAN ≡≡≡≡≡=====-----
 
         // TODO: The rest of the packets
+    }
+
+    /**
+     * Translates a PE packet into it's PC equivalent(s)
+     * @param session
+     * @param packet
+     * @return
+     */
+    public static Message[] fromPE(PocketSession session, RakNetPacket packet) {
+        PEToPCTranslator translator = PE_TO_PC_TRANSLATORS.get(packet.getClass());
+
+        if (translator == null) {
+            GlowServer.logger.log(Level.ALL, "Not translating unmapped PE packet to PC!!! This is an error!!!");
+            return new Message[0];
+        } else {
+            return translator.translate(session, packet);
+        }
+    }
+
+    /**
+     * Translates a PC packet into it's PE equivalent(s)
+     * @param session
+     * @param packet
+     * @return
+     */
+    public static RakNetPacket[] fromPC(GlowSession session, Message packet)    {
+        PCToPETranslator translator = PC_TO_PE_TRANSLATORS.get(packet.getClass());
+
+        if (translator == null) {
+            GlowServer.logger.log(Level.ALL, "Not translating unmapped PC packet to PE!!! This is an error!!!");
+            return new RakNetPacket[0];
+        } else {
+            return translator.translate(session, packet);
+        }
     }
 }
