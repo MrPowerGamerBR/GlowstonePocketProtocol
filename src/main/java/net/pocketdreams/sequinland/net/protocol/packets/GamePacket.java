@@ -15,7 +15,7 @@ import net.pocketdreams.sequinland.util.nukkit.Vector3f;
  * @author MarfGamer
  */
 public class GamePacket extends RakNetPacket {
-    public Reliability reliability = Reliability.RELIABLE_ORDERED;
+    public Reliability reliability = Reliability.RELIABLE;
 
     public GamePacket() {
         super(0xFE);

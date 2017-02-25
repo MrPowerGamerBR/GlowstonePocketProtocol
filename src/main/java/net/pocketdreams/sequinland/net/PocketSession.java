@@ -59,7 +59,7 @@ public class PocketSession extends GlowSession {
                 // delayed.add(pePacket);
                 dataPacket.add(pePacket);
             } else {
-                session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
+                session.sendMessage(Reliability.RELIABLE, pePacket);
             }
             return;
         }
@@ -69,18 +69,18 @@ public class PocketSession extends GlowSession {
             pkText.message = MessageUtils.translate(pcPacket.getText().encode());
             pkText.type = TextPacket.TYPE_SYSTEM;
             pkText.encode();
-            session.sendMessage(Reliability.RELIABLE_ORDERED, pkText);
+            session.sendMessage(Reliability.RELIABLE, pkText);
             return;
         }
         if (message instanceof LoginSuccessMessage) {
             PlayStatusPacket pkPlay = new PlayStatusPacket();
             pkPlay.status = PlayStatusPacket.OK;
             pkPlay.encode();
-            session.sendMessage(Reliability.RELIABLE_ORDERED, pkPlay);
+            session.sendMessage(Reliability.RELIABLE, pkPlay);
 
             ResourcePacksInfoPacket pkRp = new ResourcePacksInfoPacket();
             pkRp.encode();
-            session.sendMessage(Reliability.RELIABLE_ORDERED, pkRp);
+            session.sendMessage(Reliability.RELIABLE, pkRp);
             return;
         }
         if (message instanceof JoinGameMessage) {
@@ -111,7 +111,7 @@ public class PocketSession extends GlowSession {
                 pkStart.spawnZ = 0;
                 pkStart.worldName = "Shantae is cute"; // The client doesn't care about the world name anyway
                 pkStart.encode();
-                session.sendMessage(Reliability.RELIABLE_ORDERED, pkStart);
+                session.sendMessage(Reliability.RELIABLE, pkStart);
 
                 // Fill the spawn position with... nothingness
                 for (int x = -3; 3 >= x; x++) {
@@ -125,30 +125,30 @@ public class PocketSession extends GlowSession {
                         pePacket.payload = PocketChunkUtils.requestEmptyChunk();
                         pePacket.encode();
 
-                        session.sendMessage(Reliability.RELIABLE_ORDERED, pePacket);
+                        session.sendMessage(Reliability.RELIABLE, pePacket);
                     }
                 }
 
                 // for (FullChunkDataPacket f : delayed) {
-                //     session.sendMessage(Reliability.RELIABLE_ORDERED, f);
+                //     session.sendMessage(Reliability.RELIABLE, f);
                 // }
                 SequinUtils.batchPackets(session, delayed.toArray(new FullChunkDataPacket[0]));
                 delayed.clear();
                 PlayStatusPacket pkPlay = new PlayStatusPacket();
                 pkPlay.status = PlayStatusPacket.SPAWNED;
                 pkPlay.encode();
-                session.sendMessage(Reliability.RELIABLE_ORDERED, pkPlay);
+                session.sendMessage(Reliability.RELIABLE, pkPlay);
                 stored = null;
 
                 SetCommandsEnabledPacket enableCommandsPk = new SetCommandsEnabledPacket();
                 enableCommandsPk.enabled = true;
                 enableCommandsPk.encode();
-                session.sendMessage(Reliability.RELIABLE_ORDERED, enableCommandsPk);
+                session.sendMessage(Reliability.RELIABLE, enableCommandsPk);
 
                 AvailableCommandsPacket availableCommandsPk = new AvailableCommandsPacket();
                 availableCommandsPk.commands = "{\"default3\":{\"versions\":[{\"aliases\":[],\"description\":\"\",\"overloads\":{\"default\":{\"input\":{\"parameters\":[{\"name\":\"args\",\"type\":\"rawtext\",\"optional\":true}]},\"output\":{\"format_strings\"[]}}},\"permission\":\"false\"}]}}";
                 availableCommandsPk.encode();
-                session.sendMessage(Reliability.RELIABLE_ORDERED, availableCommandsPk);
+                session.sendMessage(Reliability.RELIABLE, availableCommandsPk);
                 return;
             }
         }

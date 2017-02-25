@@ -15,7 +15,7 @@ public class PERequestChunkRadiusPacketTranslator implements PEToPCTranslator<Ra
         RequestChunkRadiusPacket pePacket = (RequestChunkRadiusPacket) packet;
         ChunkRadiusUpdatedPacket crup = new ChunkRadiusUpdatedPacket();
         pePacket.radius = crup.radius; // Use client's view distance
-        session.getRakNetSession().sendMessage(Reliability.RELIABLE, pePacket);
+        session.getRakNetSession().sendMessage(Reliability.UNRELIABLE, pePacket);
         return new Message[] {};
     }
 }
