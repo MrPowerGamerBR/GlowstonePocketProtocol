@@ -4,7 +4,9 @@ import com.flowpowered.network.Message;
 import net.glowstone.net.message.play.entity.EntityHeadRotationMessage;
 import net.glowstone.net.message.play.entity.SpawnMobMessage;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.net.protocol.packets.AddEntityPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.util.PocketEntityUtils;
 
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -76,7 +78,24 @@ public class GlowCreature extends GlowLivingEntity implements Creature {
 
     @Override
     public List<GamePacket> createSpawnMessageForPocket() {
-        return Arrays.asList();
+        List<GamePacket> result = new LinkedList<>();
+        
+        AddEntityPacket pePacket = new AddEntityPacket();
+        pePacket.entityRuntimeId = this.getEntityId();
+        pePacket.entityUniqueId = this.getEntityId();
+        pePacket.x = (float) location.getX();
+        pePacket.y = (float) location.getY();
+        pePacket.z = (float) location.getZ();
+        pePacket.yaw = location.getYaw();
+        pePacket.pitch = location.getPitch();
+        pePacket.speedX = 0F;
+        pePacket.speedY = 0F;
+        pePacket.speedZ = 0F;
+        pePacket.type = PocketEntityUtils.convertToPocket(this.getType());
+        pePacket.encode();
+        result.add(pePacket);
+        
+        return result;
     }
     
     @Override
