@@ -18,6 +18,7 @@ import net.glowstone.net.message.play.entity.*;
 import net.glowstone.net.message.play.player.InteractEntityMessage;
 import net.glowstone.util.Position;
 import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.net.protocol.packets.MoveEntityPacket;
 
 import org.bukkit.*;
 import org.bukkit.World.Environment;
@@ -554,6 +555,35 @@ public abstract class GlowEntity implements Entity {
             result.add(new SetPassengerMessage(getEntityId(), getPassenger() == null ? new int[0] : new int[] {getPassenger().getEntityId()}));
         }
 
+        return result;
+    }
+    
+    public List<GamePacket> createUpdateMessageForPocket() {
+        boolean moved = hasMoved();
+        boolean rotated = hasRotated();
+
+        double x = location.getX();
+        double y = location.getY();
+        double z = location.getZ();
+
+        double dx = x * 32 - previousLocation.getX() * 32;
+        double dy = y * 32 - previousLocation.getY() * 32;
+        double dz = z * 32 - previousLocation.getZ() * 32;
+
+        dx *= 128;
+        dy *= 128;
+        dz *= 128;
+
+        boolean teleport = dx > Short.MAX_VALUE || dy > Short.MAX_VALUE || dz > Short.MAX_VALUE || dx < Short.MIN_VALUE || dy < Short.MIN_VALUE || dz < Short.MIN_VALUE;
+
+        int yaw = Position.getIntYaw(location);
+        int pitch = Position.getIntPitch(location);
+
+        List<GamePacket> result = new LinkedList<>();
+        if (teleport || moved || rotated) {
+            result.add(new MoveEntityPacket(this.getEntityId(), x, y + 1.62, z, yaw, yaw, pitch).andEncode());
+        }
+        
         return result;
     }
 

@@ -597,7 +597,11 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         for (Iterator<GlowEntity> it = knownEntities.iterator(); it.hasNext(); ) {
             GlowEntity entity = it.next();
             if (isWithinDistance(entity)) {
-                entity.createUpdateMessage().forEach(session::send);
+                if (this.isPocketProtocol()) {
+                    entity.createUpdateMessageForPocket().forEach((packet) -> this.getPocketSession().sendPocket(packet));
+                } else {
+                    entity.createUpdateMessage().forEach(session::send);
+                }
             } else {
                 destroyIds.add(entity.getEntityId());
                 it.remove();
