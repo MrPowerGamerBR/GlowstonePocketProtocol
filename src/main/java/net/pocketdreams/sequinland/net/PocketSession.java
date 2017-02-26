@@ -8,13 +8,10 @@ import io.netty.channel.Channel;
 import net.glowstone.GlowServer;
 import net.glowstone.net.GlowSession;
 import net.glowstone.net.message.SetCompressionMessage;
-import net.glowstone.net.message.login.EncryptionKeyRequestMessage;
-import net.glowstone.net.message.login.LoginStartMessage;
 import net.glowstone.net.message.login.LoginSuccessMessage;
 import net.glowstone.net.message.play.game.ChatMessage;
 import net.glowstone.net.message.play.game.ChunkDataMessage;
 import net.glowstone.net.message.play.game.JoinGameMessage;
-import net.glowstone.net.message.play.game.PositionRotationMessage;
 import net.glowstone.net.protocol.GlowProtocol;
 import net.glowstone.net.protocol.ProtocolType;
 import net.marfgamer.jraknet.protocol.Reliability;
@@ -94,9 +91,9 @@ public class PocketSession extends GlowSession {
             	
                 //PositionRotationMessage posPacket = (PositionRotationMessage) message;
                 StartGamePacket pkStart = new StartGamePacket();
-                pkStart.x = (float) posPacket.getX();
-                pkStart.y = (float) posPacket.getY() + 1.62F;
-                pkStart.z = (float) posPacket.getZ();
+                pkStart.x = (float) 0;
+                pkStart.y = 1.62F;
+                pkStart.z = (float) 0;
                 pkStart.commandsEnabled = true;
                 pkStart.dayCycleStopTime = 0;
                 pkStart.difficulty = stored.getDifficulty();
