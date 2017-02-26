@@ -603,7 +603,20 @@ public final class GlowServer implements Server {
 
     private void pocketBind() {
         logger.info("Binding PE server to " + getBindAddress(Key.SERVER_PORT).getAddress() + ":" + getPePort() + "...");
-        pocketNet = new PocketNetworkManager(getPePort(), this.getMaxPlayers(), this);
+        try {
+            pocketNet = new PocketNetworkManager(getPePort(), this.getMaxPlayers(), this);
+        } catch (Exception e)   {
+            try {
+                //try again giving a default MTu to the constructor, because it fixes some errors
+                pocketNet = new PocketNetworkManager(getPePort(), this.getMaxPlayers(), this, 1492);
+                //That MTU is the default PE one
+            } catch (Exception ex)   {
+                logger.warning("Error binding PE server:");
+                ex.printStackTrace();
+                logger.warning("PE support not initializing!");
+                return;
+            }
+        }
         logger.info("Successfully bound PE server to " + getBindAddress(Key.SERVER_PORT).getAddress() + ":" + getPePort() + ".");
         pocketNet.startThreaded();
     }
