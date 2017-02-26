@@ -21,6 +21,10 @@ public class PlayStatusPacket extends GamePacket {
         super(packet);
     }
     
+    public PlayStatusPacket(long status) {
+        this.status = status;
+    }
+    
     @Override
     public void encode() {
         this.writeByte(getPacketId());

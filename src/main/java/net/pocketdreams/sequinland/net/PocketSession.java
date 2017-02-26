@@ -87,7 +87,7 @@ public class PocketSession extends GlowSession {
             stored = (JoinGameMessage) message; // Store it for later
             return;
         }
-        if (message instanceof PositionRotationMessage) {
+        /* if (message instanceof PositionRotationMessage) {
             if (stored != null) {                
                 // We are going to start the game then.
                 JoinGameMessage joinPacket = stored;
@@ -128,7 +128,7 @@ public class PocketSession extends GlowSession {
                 session.sendMessage(Reliability.RELIABLE, availableCommandsPk);
                 return;
             }
-        }
+        } */
         return;
     }
 
