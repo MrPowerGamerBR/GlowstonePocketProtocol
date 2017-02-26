@@ -376,6 +376,7 @@ public final class ServerConfig {
         PERMISSIONS_FILE("files.permissions", "permissions.yml", Migrate.BUKKIT, "settings.permissions-file"),
         COMMANDS_FILE("files.commands", "commands.yml"),
         HELP_FILE("files.help", "help.yml"),
+        SEQUINLAND_FILE("files.sequinland", "sequinland.yml"),
 
         // advanced
         CONNECTION_THROTTLE("advanced.connection-throttle", 4000, Migrate.BUKKIT, "settings.connection-throttle"),
@@ -418,11 +419,7 @@ public final class ServerConfig {
         DB_URL("database.url", "jdbc:sqlite:config/database.db", Migrate.BUKKIT, "database.url"),
         DB_USERNAME("database.username", "glowstone", Migrate.BUKKIT, "database.username"),
         DB_PASSWORD("database.password", "nether", Migrate.BUKKIT, "database.password"),
-        DB_ISOLATION("database.isolation", "SERIALIZABLE", Migrate.BUKKIT, "database.isolation"),
-
-        // SequinLand-Glowstone
-        PE_PORT("pe.port", 19132),
-        PE_ENABLE("pe.enable", true);
+        DB_ISOLATION("database.isolation", "SERIALIZABLE", Migrate.BUKKIT, "database.isolation");
 
         private final String path;
         private final Object def;

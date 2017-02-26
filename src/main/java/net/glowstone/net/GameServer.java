@@ -19,7 +19,7 @@ public final class GameServer extends GlowSocketServer implements ConnectionMana
     }
 
     public ChannelFuture bind(InetSocketAddress address) {
-        GlowServer.logger.info("Binding server to " + address + "...");
+        GlowServer.logger.info("Binding PC server to " + address + "...");
         return super.bind(address);
     }
 
@@ -27,7 +27,7 @@ public final class GameServer extends GlowSocketServer implements ConnectionMana
     public void onBindSuccess(InetSocketAddress address) {
         getServer().setPort(address.getPort());
         getServer().setIp(address.getHostString());
-        GlowServer.logger.info("Successfully bound server to " + address + '.');
+        GlowServer.logger.info("Successfully bound PC server to " + address + '.');
         super.onBindSuccess(address);
     }
 

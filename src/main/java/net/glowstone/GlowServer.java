@@ -466,11 +466,11 @@ public final class GlowServer implements Server {
         }
         if (getPePort() > 0 && getPePort() < 65535) { //check if port is a valid port
             if (getPeEnabled()) {
-                logger.info("PE support enabled on UDP port" + getPePort());
+                logger.info("PE support enabled on UDP port " + getPePort());
             }
         } else {
             logger.info("PE port is not valid, not initilazing PE support");
-            config.set(Key.PE_ENABLE, false);
+            config.getConfigFile(Key.SEQUINLAND_FILE).getConfigurationSection("pe").set("enable", false);
         }
 
         // Load player lists
@@ -602,7 +602,9 @@ public final class GlowServer implements Server {
     }
 
     private void pocketBind() {
+        logger.info("Binding PE server to " + getBindAddress(Key.SERVER_PORT).getAddress() + ":" + getPePort() + "...");
         pocketNet = new PocketNetworkManager(getPePort(), this.getMaxPlayers(), this);
+        logger.info("Successfully bound PE server to " + getBindAddress(Key.SERVER_PORT).getAddress() + ":" + getPePort() + ".");
         pocketNet.startThreaded();
     }
     
@@ -1793,11 +1795,11 @@ public final class GlowServer implements Server {
     }
 
     public boolean getPeEnabled() {
-        return config.getBoolean(Key.PE_ENABLE);
+        return config.getConfigFile(Key.SEQUINLAND_FILE).getConfigurationSection("pe").getBoolean("enable");
     }
 
     public int getPePort()  {
-        return config.getInt(Key.PE_PORT);
+        return config.getConfigFile(Key.SEQUINLAND_FILE).getConfigurationSection("pe").getInt("port");
     }
 
     @Override
