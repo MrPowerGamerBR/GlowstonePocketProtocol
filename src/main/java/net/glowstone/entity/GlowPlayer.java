@@ -783,7 +783,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         setCompassTarget(world.getSpawnLocation()); // set our compass target
         session.send(new PositionRotationMessage(location));
         teleportedTo = location.clone();
-
+        if (this.isPocketProtocol()) { endTeleport(); }
         sendWeather();
         sendRainDensity();
         sendSkyDarkness();
@@ -1505,6 +1505,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         }
 
         teleportedTo = location.clone();
+        if (this.isPocketProtocol()) { endTeleport(); }
         return true;
     }
 
