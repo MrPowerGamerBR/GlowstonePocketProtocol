@@ -58,6 +58,7 @@ import net.pocketdreams.sequinland.net.protocol.packets.PlayStatusPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.SetTimePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.StartGamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
+import net.pocketdreams.sequinland.net.protocol.packets.UpdateBlockPacket;
 import net.pocketdreams.sequinland.util.PocketChunkUtils;
 
 import org.bukkit.*;
@@ -2033,10 +2034,16 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
     }
 
     public void sendBlockChange(BlockChangeMessage message) {
-        // only send message if the chunk is within visible range
-        Key key = new Key(message.getX() >> 4, message.getZ() >> 4);
-        if (canSeeChunk(key)) {
-            blockChanges.add(message);
+        if (this.isPocketProtocol()) {
+            int type = message.getType() >> 4;
+            int meta = message.getType() & 15;
+            this.getPocketSession().sendPocket(new UpdateBlockPacket(message.getX(), message.getY(), message.getZ(), type, meta).andEncode());
+        } else {
+            // only send message if the chunk is within visible range
+            Key key = new Key(message.getX() >> 4, message.getZ() >> 4);
+            if (canSeeChunk(key)) {
+                blockChanges.add(message);
+            }
         }
     }
 
