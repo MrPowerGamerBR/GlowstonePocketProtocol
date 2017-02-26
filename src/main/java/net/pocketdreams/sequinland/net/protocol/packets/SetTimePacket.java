@@ -15,6 +15,11 @@ public class SetTimePacket extends GamePacket {
         super(packet);
     }
     
+    public SetTimePacket(int time, boolean dayLightCycle) {
+        this.time = time;
+        this.dayLightCycle = dayLightCycle;
+    }
+    
     @Override
     public void encode() {
         this.writeByte(getPacketId());

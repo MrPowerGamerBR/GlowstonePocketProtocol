@@ -340,10 +340,20 @@ public class GamePacket extends RakNetPacket {
         throw new UnsupportedOperationException();
     }
 
+    public GamePacket andEncode() {
+        this.encode();
+        return this;
+    }
+    
     public void decode() {
         throw new UnsupportedOperationException();
     }
 
+    public GamePacket andDecode() {
+        this.decode();
+        return this;
+    }
+    
     public short getPacketId() {
         throw new UnsupportedOperationException();
     }

@@ -20,6 +20,7 @@ import net.marfgamer.jraknet.protocol.Reliability;
 import net.marfgamer.jraknet.session.RakNetClientSession;
 import net.pocketdreams.sequinland.net.protocol.packets.AvailableCommandsPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.FullChunkDataPacket;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.PlayStatusPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.ResourcePacksInfoPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.SetCommandsEnabledPacket;
@@ -157,5 +158,9 @@ public class PocketSession extends GlowSession {
     
     public RakNetClientSession getRakNetSession() {
         return session;
+    }
+
+    public void sendPocket(GamePacket packet) {
+        session.sendMessage(packet.reliability, packet);
     }
 }

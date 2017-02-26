@@ -51,6 +51,9 @@ import net.glowstone.util.nbt.CompoundTag;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+import net.pocketdreams.sequinland.net.PocketSession;
+import net.pocketdreams.sequinland.net.protocol.packets.SetTimePacket;
+
 import org.bukkit.*;
 import org.bukkit.Effect.Type;
 import org.bukkit.World.Environment;
@@ -2511,7 +2514,11 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         if (!timeRelative || !world.getGameRuleMap().getBoolean("doDaylightCycle")) {
             time *= -1; // negative value indicates fixed time
         }
-        session.send(new TimeMessage(world.getFullTime(), time));
+        if (this.isPocketProtocol()) {
+            this.getPocketSession().sendPocket(new SetTimePacket((int) time, world.isGameRule("doDaylightCycle")).andEncode());
+        } else {
+            session.send(new TimeMessage(world.getFullTime(), time));
+        }
     }
 
     @Override
@@ -2745,5 +2752,18 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
     public boolean isInWater() {
         Material mat = getLocation().getBlock().getType();
         return mat == Material.WATER || mat == Material.STATIONARY_WATER;
+    }
+    
+    /**
+     * Returns true if the player is using pocket protocol (MCPE/MCW10E)
+     * 
+     * @return True if the player is using pocket protocol
+     */
+    public boolean isPocketProtocol() {
+        return session instanceof PocketSession;
+    }
+    
+    public PocketSession getPocketSession() {
+        return (PocketSession) session;
     }
 }
