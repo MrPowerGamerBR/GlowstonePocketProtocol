@@ -3,7 +3,6 @@ package net.pocketdreams.sequinland.net.translator.pocket;
 import com.flowpowered.network.Message;
 
 import net.glowstone.net.message.play.player.PlayerPositionLookMessage;
-import net.marfgamer.jraknet.RakNetPacket;
 import net.pocketdreams.sequinland.net.PocketSession;
 import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.MovePlayerPacket;

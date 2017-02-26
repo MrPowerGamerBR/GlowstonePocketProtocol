@@ -24,6 +24,7 @@ public class SequinUtils {
             byte[] packetPayload = stream.getByteArray();
             BinaryStream packetStream = new BinaryStream(packetPayload);
             byte id = (byte) packetStream.getByte();
+            System.out.println("Decoded: " + id);
             byte[] packetBuffer = packetStream.getBuffer();
 
             Class<? extends GamePacket> clazz = ProtocolInfo.getPacketById(id);
