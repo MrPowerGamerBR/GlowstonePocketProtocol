@@ -366,8 +366,11 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         if (server.isHardcore()) {
             gameMode |= 0x8;
         }
-        if (this.isPocketProtocol()) { this.getPocketSession().sendPocket(new StartGamePacket((long) SELF_ID, (long) SELF_ID, (float) location.getX(), (float) (location.getY() + 1.62F), (float) location.getZ(), 1337, (byte) world.getEnvironment().getId(), 1, 1, world.getDifficulty().getValue(), world.getSpawnLocation().getBlockX(), world.getSpawnLocation().getBlockY(), world.getSpawnLocation().getBlockZ(), true, -1, false, 0, 0, true, false, "", "Shantae is cute").andEncode()); }
-        session.send(new JoinGameMessage(SELF_ID, gameMode, world.getEnvironment().getId(), world.getDifficulty().getValue(), session.getServer().getMaxPlayers(), type, world.getGameRuleMap().getBoolean("reducedDebugInfo")));
+        if (this.isPocketProtocol()) {
+            this.getPocketSession().sendPocket(new StartGamePacket((long) SELF_ID, (long) SELF_ID, (float) location.getX(), (float) (location.getY() + 1.62F), (float) location.getZ(), 1337, (byte) world.getEnvironment().getId(), 1, 1, world.getDifficulty().getValue(), world.getSpawnLocation().getBlockX(), world.getSpawnLocation().getBlockY(), world.getSpawnLocation().getBlockZ(), true, -1, false, 0, 0, true, false, "", "Shantae is cute").andEncode());
+        } else {
+            session.send(new JoinGameMessage(SELF_ID, gameMode, world.getEnvironment().getId(), world.getDifficulty().getValue(), session.getServer().getMaxPlayers(), type, world.getGameRuleMap().getBoolean("reducedDebugInfo")));
+        }
         setGameModeDefaults();
 
         // send server brand and supported plugin channels
@@ -398,9 +401,12 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         updateInventory(); // send inventory contents
 
         // send initial location
-        session.send(new PositionRotationMessage(location));
-
-        if (this.isPocketProtocol()) { this.getPocketSession().sendPocket(new PlayStatusPacket(PlayStatusPacket.SPAWNED).andEncode()); }
+        if (this.isPocketProtocol()) {
+            this.getPocketSession().sendPocket(new PlayStatusPacket(PlayStatusPacket.SPAWNED).andEncode());
+        } else {
+            session.send(new PositionRotationMessage(location));
+        }
+        
         if (!server.getResourcePackURL().isEmpty()) {
             setResourcePack(server.getResourcePackURL(), server.getResourcePackHash());
         }
