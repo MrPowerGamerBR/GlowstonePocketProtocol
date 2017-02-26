@@ -110,9 +110,9 @@ public class GamePacket extends RakNetPacket {
      * @return A vector of 3 floats
      */
     public Vector3f readVector3f() {
-        float x = this.readFloat();
-        float y = this.readFloat();
-        float z = this.readFloat();
+        float x = this.readLFloat();
+        float y = this.readLFloat();
+        float z = this.readLFloat();
         return new Vector3f(x, y, z);
     }
 
