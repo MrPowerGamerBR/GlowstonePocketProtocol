@@ -24,15 +24,11 @@ public class SequinUtils {
             byte[] packetPayload = stream.getByteArray();
             BinaryStream packetStream = new BinaryStream(packetPayload);
             byte id = (byte) packetStream.getByte();
-            System.out.println("ID: " + id);
             byte[] packetBuffer = packetStream.getBuffer();
 
             Class<? extends GamePacket> clazz = ProtocolInfo.getPacketById(id);
 
-            System.out.println("Packet ID: " + id);
-
             if (clazz != null) {
-                System.out.println("Recieved packet: " + clazz.getSimpleName());
                 try {
                     GamePacket pocketPacket = clazz.newInstance();
                     pocketPacket.setBuffer(packetBuffer);
