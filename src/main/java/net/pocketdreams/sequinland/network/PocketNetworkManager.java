@@ -18,9 +18,11 @@ import net.marfgamer.jraknet.session.RakNetClientSession;
 import net.pocketdreams.sequinland.network.protocol.ProtocolInfo;
 import net.pocketdreams.sequinland.network.protocol.packets.BatchPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.network.protocol.packets.MovePlayerPacket;
 import net.pocketdreams.sequinland.network.translator.PEToPCTranslator;
 import net.pocketdreams.sequinland.network.translator.TranslatorRegistry;
 import net.pocketdreams.sequinland.network.translator.pocket.PEBatchPacketTranslator;
+import net.pocketdreams.sequinland.network.translator.pocket.PEMovePlayerPacketTranslator;
 import net.pocketdreams.sequinland.util.ReflectionUtils;
 
 public class PocketNetworkManager extends RakNetServer {
@@ -77,12 +79,12 @@ public class PocketNetworkManager extends RakNetServer {
         
         Class<? extends GamePacket> clazz = ProtocolInfo.getPacketById(id);
         
-        if (!(id == 6)) {
+        if (!(id == 6) && !(id == 20)) {
             System.out.println("Packet ID: " + id);
         }
         
         if (clazz != null) {
-            if (!(clazz == BatchPacket.class)) {
+            if (!(clazz == BatchPacket.class) && !(clazz == MovePlayerPacket.class)) {
                 System.out.println("Recieved packet: " + clazz.getSimpleName());
             }
             try {
@@ -95,7 +97,7 @@ public class PocketNetworkManager extends RakNetServer {
                 PEToPCTranslator<GamePacket> translator = TranslatorRegistry.PE_TO_PC_TRANSLATORS.get(pocketPacket.getClass());
                 
                 if (translator != null) {
-                    if (!(translator.getClass() == PEBatchPacketTranslator.class)) {
+                    if (!(translator.getClass() == PEBatchPacketTranslator.class) && !(translator.getClass() == PEMovePlayerPacketTranslator.class)) {
                         System.out.println("Using translator " + translator.getClass().getSimpleName());
                     }
                     Message[] messages = translator.translate(pocketSession, pocketPacket);

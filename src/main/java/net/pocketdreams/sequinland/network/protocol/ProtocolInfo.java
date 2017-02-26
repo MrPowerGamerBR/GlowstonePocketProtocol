@@ -6,6 +6,7 @@ import net.pocketdreams.sequinland.network.protocol.packets.BatchPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
 import net.pocketdreams.sequinland.network.protocol.packets.LoginPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.MovePlayerPacket;
+import net.pocketdreams.sequinland.network.protocol.packets.PlayerActionPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.RequestChunkRadiusPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.TextPacket;
 
@@ -102,6 +103,7 @@ public class ProtocolInfo {
         packets.put(BATCH_PACKET, BatchPacket.class);
         packets.put(REQUEST_CHUNK_RADIUS_PACKET, RequestChunkRadiusPacket.class);
         packets.put(MOVE_PLAYER_PACKET, MovePlayerPacket.class);
+        packets.put(PLAYER_ACTION_PACKET, PlayerActionPacket.class);
     }
     
     public static Class<? extends GamePacket> getPacketById(short id) {

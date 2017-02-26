@@ -67,12 +67,14 @@ import net.marfgamer.jraknet.RakNetPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.BatchPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.LoginPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.MovePlayerPacket;
+import net.pocketdreams.sequinland.network.protocol.packets.PlayerActionPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.RequestChunkRadiusPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.TextPacket;
 import net.pocketdreams.sequinland.network.translator.both.IgnorePacketTranslator;
 import net.pocketdreams.sequinland.network.translator.pocket.PEBatchPacketTranslator;
 import net.pocketdreams.sequinland.network.translator.pocket.PELoginPacketTranslator;
 import net.pocketdreams.sequinland.network.translator.pocket.PEMovePlayerPacketTranslator;
+import net.pocketdreams.sequinland.network.translator.pocket.PEPlayerActionPacketTranslator;
 import net.pocketdreams.sequinland.network.translator.pocket.PERequestChunkRadiusPacketTranslator;
 import net.pocketdreams.sequinland.network.translator.pocket.PETextPacketTranslator;
 
@@ -173,5 +175,6 @@ public final class TranslatorRegistry {
         PE_TO_PC_TRANSLATORS.put(TextPacket.class, new PETextPacketTranslator());
         PE_TO_PC_TRANSLATORS.put(RequestChunkRadiusPacket.class, new PERequestChunkRadiusPacketTranslator());
         PE_TO_PC_TRANSLATORS.put(MovePlayerPacket.class, new PEMovePlayerPacketTranslator());
+        PE_TO_PC_TRANSLATORS.put(PlayerActionPacket.class, new PEPlayerActionPacketTranslator());
     }
 }
