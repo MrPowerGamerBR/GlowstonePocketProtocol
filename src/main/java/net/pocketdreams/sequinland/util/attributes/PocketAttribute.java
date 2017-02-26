@@ -19,7 +19,7 @@ public class PocketAttribute {
     private static final HashMap<AttributeName, PocketAttribute> attributes = new HashMap<>();
     
     static {
-        attributes.put(AttributeName.HEALTH, new PocketAttribute(AttributeName.HEALTH.getName(), 0F, 0F, 20F, 20F));
+        attributes.put(AttributeName.HEALTH, new PocketAttribute(AttributeName.HEALTH.getName(), 0F, 20F, 20F, 20F));
         attributes.put(AttributeName.ABSORPTION, new PocketAttribute(AttributeName.ABSORPTION.getName(), 0F, 4F, 0F, 0F));
         attributes.put(AttributeName.HUNGER, new PocketAttribute(AttributeName.HUNGER.getName(), 0F, 20F, 20F, 20F));
         attributes.put(AttributeName.SATURATION, new PocketAttribute(AttributeName.SATURATION.getName(), 0F, 20F, 5F, 5F));
