@@ -1,8 +1,10 @@
 package net.pocketdreams.sequinland.net.protocol.packets;
 
+import lombok.AllArgsConstructor;
 import net.marfgamer.jraknet.Packet;
 import net.pocketdreams.sequinland.net.protocol.ProtocolInfo;
 
+@AllArgsConstructor
 public class FullChunkDataPacket extends GamePacket {
     public int chunkX;
     public int chunkZ;

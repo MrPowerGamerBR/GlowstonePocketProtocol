@@ -52,7 +52,7 @@ public class PocketSession extends GlowSession {
         // So, this means that this is only kept for plugins that are sending packets
         // (ProtocolLib)
         System.out.println("Sending " + message.getClass().getSimpleName() + " to client!");
-        if (message instanceof ChunkDataMessage) {
+        /* if (message instanceof ChunkDataMessage) {
             ChunkDataMessage pcPacket = (ChunkDataMessage) message;
             FullChunkDataPacket pePacket = new FullChunkDataPacket();
             pePacket.chunkX = pcPacket.getX();
@@ -61,7 +61,7 @@ public class PocketSession extends GlowSession {
             pePacket.encode();
             session.sendMessage(Reliability.RELIABLE, pePacket);
             return;
-        }
+        } */
         /* if (message instanceof ChatMessage) {
             ChatMessage pcPacket = (ChatMessage) message;
             TextPacket pkText = new TextPacket();

@@ -52,10 +52,12 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.pocketdreams.sequinland.net.PocketSession;
+import net.pocketdreams.sequinland.net.protocol.packets.FullChunkDataPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.PlayStatusPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.SetTimePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.StartGamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
+import net.pocketdreams.sequinland.util.PocketChunkUtils;
 
 import org.bukkit.*;
 import org.bukkit.Effect.Type;
@@ -720,7 +722,11 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
         for (Key key : newChunks) {
             GlowChunk chunk = world.getChunkAt(key.getX(), key.getZ());
-            session.send(chunk.toMessage(skylight));
+            if (this.isPocketProtocol()) {
+                this.getPocketSession().sendPocket(new FullChunkDataPacket(key.getX(), key.getZ(), PocketChunkUtils.translateToPocket(chunk)).andEncode());
+            } else {
+                session.send(chunk.toMessage(skylight));
+            }
         }
 
         // send visible tile entity data
