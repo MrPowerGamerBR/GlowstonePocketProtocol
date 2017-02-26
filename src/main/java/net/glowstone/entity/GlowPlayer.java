@@ -411,7 +411,14 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         if (this.isPocketProtocol()) {
             this.getPocketSession().sendPocket(new UpdateAttributesPacket(SELF_ID,
                     new PocketAttribute[] {
-                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).withVal((float) this.getHealth())
+                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).clone().withVal((float) this.getHealth()),
+                            PocketAttribute.getAttributeByName(AttributeName.HUNGER).clone().withVal((float) this.getFoodLevel()),
+                            PocketAttribute.getAttributeByName(AttributeName.SATURATION).clone().withVal((float) this.getSaturation()),
+                            PocketAttribute.getAttributeByName(AttributeName.ABSORPTION).clone(),
+                            PocketAttribute.getAttributeByName(AttributeName.EXPERIENCE).clone(),
+                            PocketAttribute.getAttributeByName(AttributeName.KNOCKBACK_RESISTENCE).clone(),
+                            PocketAttribute.getAttributeByName(AttributeName.LEVEL).clone(),
+                            PocketAttribute.getAttributeByName(AttributeName.SPEED).clone()
                     }).andEncode());
             this.getPocketSession().sendPocket(new PlayStatusPacket(PlayStatusPacket.SPAWNED).andEncode());
         } else {
@@ -1476,7 +1483,9 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         if (this.isPocketProtocol()) {
             this.getPocketSession().sendPocket(new UpdateAttributesPacket(SELF_ID,
                     new PocketAttribute[] {
-                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).withVal((float) this.getHealth())
+                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).clone().withVal((float) this.getHealth()),
+                            PocketAttribute.getAttributeByName(AttributeName.HUNGER).clone().withVal((float) this.getFoodLevel()),
+                            PocketAttribute.getAttributeByName(AttributeName.SATURATION).clone().withVal((float) this.getSaturation())
                     }).andEncode());
         }
         else {
