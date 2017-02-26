@@ -409,18 +409,18 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
         // send initial location
         if (this.isPocketProtocol()) {
+            this.getPocketSession().sendPocket(new PlayStatusPacket(PlayStatusPacket.SPAWNED).andEncode());
             this.getPocketSession().sendPocket(new UpdateAttributesPacket(SELF_ID,
                     new PocketAttribute[] {
-                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).clone().withVal(20).withMax(20),
-                            PocketAttribute.getAttributeByName(AttributeName.HUNGER).clone().withVal((float) this.getFoodLevel()),
-                            PocketAttribute.getAttributeByName(AttributeName.SATURATION).clone().withVal((float) this.getSaturation()),
-                            PocketAttribute.getAttributeByName(AttributeName.ABSORPTION).clone(),
-                            PocketAttribute.getAttributeByName(AttributeName.EXPERIENCE).clone(),
-                            PocketAttribute.getAttributeByName(AttributeName.KNOCKBACK_RESISTENCE).clone(),
-                            PocketAttribute.getAttributeByName(AttributeName.LEVEL).clone(),
+                            // PocketAttribute.getAttributeByName(AttributeName.HEALTH).clone().withVal(20).withMax(20),
+                            // PocketAttribute.getAttributeByName(AttributeName.HUNGER).clone().withVal((float) this.getFoodLevel()),
+                            // PocketAttribute.getAttributeByName(AttributeName.SATURATION).clone().withVal((float) this.getSaturation()),
+                            // PocketAttribute.getAttributeByName(AttributeName.ABSORPTION).clone(),
+                            // PocketAttribute.getAttributeByName(AttributeName.EXPERIENCE).clone(),
+                            // PocketAttribute.getAttributeByName(AttributeName.KNOCKBACK_RESISTENCE).clone(),
+                            // PocketAttribute.getAttributeByName(AttributeName.LEVEL).clone(),
                             PocketAttribute.getAttributeByName(AttributeName.SPEED).clone()
                     }).andEncode());
-            this.getPocketSession().sendPocket(new PlayStatusPacket(PlayStatusPacket.SPAWNED).andEncode());
         } else {
             session.send(new PositionRotationMessage(location));
         }
@@ -1483,7 +1483,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         if (this.isPocketProtocol()) {
             this.getPocketSession().sendPocket(new UpdateAttributesPacket(SELF_ID,
                     new PocketAttribute[] {
-                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).clone().withVal(20).withMax(20),
+                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).clone().withVal((float) getHealth()).withMax((float) getMaxHealth()),
                             PocketAttribute.getAttributeByName(AttributeName.HUNGER).clone().withVal((float) this.getFoodLevel()),
                             PocketAttribute.getAttributeByName(AttributeName.SATURATION).clone().withVal((float) this.getSaturation())
                     }).andEncode());
