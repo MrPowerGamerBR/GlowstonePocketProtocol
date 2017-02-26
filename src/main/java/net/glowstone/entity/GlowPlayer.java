@@ -1023,7 +1023,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     @Override
     public List<GamePacket> createSpawnMessageForPocket() {
-        return Arrays.asList();
+        return super.createSpawnMessageForPocket();
     }
     
     @Override

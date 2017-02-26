@@ -1,11 +1,13 @@
 package net.pocketdreams.sequinland.net.protocol.packets;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
 import net.marfgamer.jraknet.protocol.Reliability;
 import net.pocketdreams.sequinland.util.VarInt;
+import net.pocketdreams.sequinland.util.nukkit.Binary;
 import net.pocketdreams.sequinland.util.nukkit.Vector2;
 import net.pocketdreams.sequinland.util.nukkit.Vector2f;
 import net.pocketdreams.sequinland.util.nukkit.Vector3;
@@ -325,6 +327,11 @@ public class GamePacket extends RakNetPacket {
         return this;
     }
 
+    public GamePacket writeUUID(UUID uuid) {
+        this.write(Binary.writeUUID(uuid));
+        return this;
+    }
+    
     /**
      * If a class that extends <code>GamePacket</code> overrides this and makes
      * it return <code>true</code>, whenever the <code>Player</code> object

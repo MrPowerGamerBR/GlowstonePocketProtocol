@@ -10,6 +10,7 @@ import net.glowstone.net.message.play.entity.EntityHeadRotationMessage;
 import net.glowstone.net.message.play.entity.SpawnPlayerMessage;
 import net.glowstone.util.InventoryUtil;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.net.protocol.packets.AddPlayerPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
 
 import org.bukkit.GameMode;
@@ -144,7 +145,30 @@ public abstract class GlowHumanEntity extends GlowLivingEntity implements HumanE
 
     @Override
     public List<GamePacket> createSpawnMessageForPocket() {
-        return Arrays.asList();
+        List<GamePacket> result = new LinkedList<>();
+        
+        AddPlayerPacket pePacket = new AddPlayerPacket();
+        pePacket.entityRuntimeId = this.getEntityId();
+        pePacket.entityUniqueId = this.getEntityId();
+        double x = location.getX();
+        double y = location.getY();
+        double z = location.getZ();
+        int yaw = Position.getIntYaw(location);
+        int pitch = Position.getIntPitch(location);
+        pePacket.x = (float) x;
+        pePacket.y = (float) y;
+        pePacket.z = (float) z;
+        pePacket.pitch = pitch;
+        pePacket.yaw = yaw;
+        pePacket.uuid = this.getUniqueId();
+        pePacket.speedX = 0F;
+        pePacket.speedY = 0F;
+        pePacket.speedZ = 0F;
+        pePacket.username = this.getCustomName();
+        pePacket.encode();
+        result.add(pePacket);
+        
+        return result;
     }
     
     @Override
