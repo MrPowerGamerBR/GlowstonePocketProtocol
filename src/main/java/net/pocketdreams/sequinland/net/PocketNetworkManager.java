@@ -2,6 +2,7 @@ package net.pocketdreams.sequinland.net;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -114,5 +115,10 @@ public class PocketNetworkManager extends RakNetServer {
     @Override
     public void onSessionException(RakNetClientSession session, Throwable throwable) {
         throwable.printStackTrace();
+    }
+    
+    @Override
+    public void onAddressBlocked(InetAddress address, long time) {
+        System.out.println("Client " + address.getHostName() + " blocked for " + time);
     }
 }
