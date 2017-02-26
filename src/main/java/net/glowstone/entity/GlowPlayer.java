@@ -1228,6 +1228,14 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
     }
 
     @Override
+    public void setOnGround(boolean onGround) {
+        if (getAllowFlight()) {
+            setFallDistance(0);
+        }
+        super.setOnGround(onGround);
+    }
+
+    @Override
     public boolean getAllowFlight() {
         return canFly;
     }
