@@ -18,7 +18,6 @@ public class PETextPacketTranslator implements PEToPCTranslator<GamePacket> {
             pePacket.message = pePacket.message.replaceFirst("!", "/");
         }
         IncomingChatMessage pcPacket = new IncomingChatMessage(pePacket.message);
-        session.messageReceived(pcPacket);
         return new Message[] { pcPacket };
     }
 }
