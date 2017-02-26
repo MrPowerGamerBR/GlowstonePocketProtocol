@@ -566,12 +566,6 @@ public class GlowSession extends BasicSession {
     public void onDisconnect() {
         disconnected = true;
     }
-
-    @Override
-    public void send(Message message) {
-        System.out.println("Sending message: " + message.getClass().getSimpleName());
-        super.send(message);
-    }
     
     @Override
     public void messageReceived(Message message) {

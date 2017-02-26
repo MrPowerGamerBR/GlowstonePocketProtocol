@@ -16,6 +16,8 @@ import net.glowstone.net.message.play.player.InteractEntityMessage;
 import net.glowstone.net.message.play.player.InteractEntityMessage.Action;
 import net.glowstone.util.InventoryUtil;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -308,6 +310,11 @@ public class GlowArmorStand extends GlowLivingEntity implements ArmorStand {
                 new EntityEquipmentMessage(id, EntityEquipmentMessage.CHESTPLATE_SLOT, getChestplate()),
                 new EntityEquipmentMessage(id, EntityEquipmentMessage.HELMET_SLOT, getHelmet())
         );
+    }
+    
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
     }
 
     @Override

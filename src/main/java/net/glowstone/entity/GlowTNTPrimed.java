@@ -5,6 +5,8 @@ import net.glowstone.EventFactory;
 import net.glowstone.Explosion;
 import net.glowstone.net.message.play.entity.SpawnObjectMessage;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -12,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -99,5 +102,10 @@ public class GlowTNTPrimed extends GlowExplosive implements TNTPrimed {
     @Override
     public Location getOrigin() {
         return null;
+    }
+
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
     }
 }

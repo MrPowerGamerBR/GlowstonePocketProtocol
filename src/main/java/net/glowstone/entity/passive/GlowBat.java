@@ -6,6 +6,8 @@ import net.glowstone.entity.meta.MetadataIndex;
 import net.glowstone.net.message.play.entity.EntityHeadRotationMessage;
 import net.glowstone.net.message.play.entity.SpawnMobMessage;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -13,6 +15,7 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.EntityType;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +44,11 @@ public class GlowBat extends GlowAmbient implements Bat {
         return result;
     }
 
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
+    }
+    
     @Override
     public boolean isAwake() {
         return metadata.getByte(MetadataIndex.BAT_HANGING) == 1;

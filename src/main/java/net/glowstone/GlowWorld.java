@@ -25,6 +25,8 @@ import net.glowstone.net.message.play.player.ServerDifficultyMessage;
 import net.glowstone.util.BlockStateDelegate;
 import net.glowstone.util.GameRuleManager;
 import net.glowstone.util.collection.ConcurrentSet;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -1294,7 +1296,9 @@ public final class GlowWorld implements World {
                 }
                 if (!spawnEvent.isCancelled()) {
                     List<Message> spawnMessage = entity.createSpawnMessage();
-                    getRawPlayers().stream().filter(player -> player.canSeeEntity(impl)).forEach(player -> player.getSession().sendAll(spawnMessage.toArray(new Message[spawnMessage.size()])));
+                    List<GamePacket> spawnMessagePocket = entity.createSpawnMessageForPocket();
+                    getRawPlayers().stream().filter(player -> !player.isPocketProtocol()).filter(player -> player.canSeeEntity(impl)).forEach(player -> player.getSession().sendAll(spawnMessage.toArray(new Message[spawnMessage.size()])));
+                    getRawPlayers().stream().filter(player -> player.isPocketProtocol()).filter(player -> player.canSeeEntity(impl)).forEach(player -> player.getPocketSession().sendAllPocket(spawnMessagePocket.toArray(new GamePacket[spawnMessagePocket.size()])));
                 } else {
                     // TODO: separate spawning and construction for better event cancellation
                     entity.remove();

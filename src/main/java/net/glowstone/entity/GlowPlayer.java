@@ -53,6 +53,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.pocketdreams.sequinland.net.PocketSession;
 import net.pocketdreams.sequinland.net.protocol.packets.FullChunkDataPacket;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.PlayStatusPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.SetTimePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.StartGamePacket;
@@ -617,7 +618,11 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
                     .filter(entity -> !hiddenEntities.contains(entity.getUniqueId()))
                     .forEach((entity) -> {
                         knownEntities.add(entity);
-                        entity.createSpawnMessage().forEach(session::send);
+                        if (this.isPocketProtocol()) {
+                            entity.createSpawnMessageForPocket().forEach((packet) -> this.getPocketSession().sendPocket(packet));
+                        } else {
+                            entity.createSpawnMessage().forEach(session::send);
+                        }
                     });
         });
 
@@ -1016,6 +1021,11 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         return result;
     }
 
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
+    }
+    
     @Override
     public String getDisplayName() {
         if (displayName != null) {

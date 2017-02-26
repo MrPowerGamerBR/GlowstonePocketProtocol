@@ -76,6 +76,12 @@ public class PocketSession extends GlowSession {
         session.sendMessage(packet.reliability, packet);
     }
     
+    public void sendAllPocket(GamePacket[] array) {
+        for (GamePacket packet : array) {
+            sendPocket(packet);
+        }
+    }
+    
     @Override
     protected void finalizeLogin(PlayerProfile profile) {
         // enable compression if needed

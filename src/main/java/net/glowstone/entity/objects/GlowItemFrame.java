@@ -10,6 +10,8 @@ import net.glowstone.net.message.play.entity.EntityTeleportMessage;
 import net.glowstone.net.message.play.entity.SpawnObjectMessage;
 import net.glowstone.net.message.play.player.InteractEntityMessage;
 import net.glowstone.net.message.play.player.InteractEntityMessage.Action;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -183,6 +185,11 @@ public final class GlowItemFrame extends GlowEntity implements ItemFrame {
         return Arrays.asList(new SpawnObjectMessage(id, getUniqueId(), 71, location.getBlockX(), location.getBlockY(), location.getBlockZ(), 0, yaw, getFacingNumber(face), 0, 0, 0), new EntityMetadataMessage(id, metadata.getEntryList()));
     }
 
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
+    }
+    
     @Override
     public boolean isEmpty() {
         return itemInFrame == null || itemInFrame == Material.AIR;

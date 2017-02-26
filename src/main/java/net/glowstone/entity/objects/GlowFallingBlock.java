@@ -7,6 +7,8 @@ import net.glowstone.entity.GlowEntity;
 import net.glowstone.net.message.play.entity.SpawnObjectMessage;
 import net.glowstone.util.Position;
 import net.glowstone.util.nbt.CompoundTag;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -145,6 +147,11 @@ public class GlowFallingBlock extends GlowEntity implements FallingBlock {
         );
     }
 
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
+    }
+    
     @Override
     protected void pulsePhysics() {
         if (location.getY() < 0) {

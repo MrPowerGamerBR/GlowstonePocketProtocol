@@ -6,6 +6,8 @@ import net.glowstone.entity.GlowPlayer;
 import net.glowstone.entity.meta.MetadataIndex;
 import net.glowstone.net.message.play.entity.*;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -187,6 +189,11 @@ public final class GlowItem extends GlowEntity implements Item {
         );
     }
 
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     // Item stuff
 

@@ -6,6 +6,8 @@ import net.glowstone.GlowWorld;
 import net.glowstone.block.GlowBlock;
 import net.glowstone.entity.physics.BoundingBox;
 import net.glowstone.net.message.play.entity.SpawnLightningStrikeMessage;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -101,6 +103,11 @@ public class GlowLightningStrike extends GlowWeather implements LightningStrike 
         return Arrays.asList(new SpawnLightningStrikeMessage(id, x, y, z));
     }
 
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
+    }
+    
     @Override
     public List<Message> createUpdateMessage() {
         return Arrays.asList();

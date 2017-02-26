@@ -4,6 +4,8 @@ import com.flowpowered.network.Message;
 import net.glowstone.net.message.play.entity.EntityHeadRotationMessage;
 import net.glowstone.net.message.play.entity.SpawnMobMessage;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -11,6 +13,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,6 +74,11 @@ public class GlowCreature extends GlowLivingEntity implements Creature {
         return result;
     }
 
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
+    }
+    
     @Override
     public LivingEntity getTarget() {
         return target;

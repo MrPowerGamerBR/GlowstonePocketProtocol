@@ -4,11 +4,14 @@ import com.flowpowered.network.Message;
 import net.glowstone.entity.GlowEntity;
 import net.glowstone.net.message.play.entity.SpawnObjectMessage;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.EvokerFangs;
 import org.bukkit.entity.LivingEntity;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +37,11 @@ public class GlowEvokerFangs extends GlowEntity implements EvokerFangs {
         return result;
     }
 
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
+    }
+    
     @Override
     public LivingEntity getOwner() {
         return owner;

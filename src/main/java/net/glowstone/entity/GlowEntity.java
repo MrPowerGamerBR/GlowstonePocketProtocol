@@ -17,6 +17,8 @@ import net.glowstone.entity.physics.EntityBoundingBox;
 import net.glowstone.net.message.play.entity.*;
 import net.glowstone.net.message.play.player.InteractEntityMessage;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
@@ -496,6 +498,8 @@ public abstract class GlowEntity implements Entity {
      */
     public abstract List<Message> createSpawnMessage();
 
+    public abstract List<GamePacket> createSpawnMessageForPocket();
+    
     /**
      * Creates a {@link Message} which can be sent to a client to update this
      * entity.

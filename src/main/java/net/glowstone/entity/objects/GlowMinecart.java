@@ -7,6 +7,8 @@ import net.glowstone.inventory.GlowInventory;
 import net.glowstone.net.message.play.entity.SpawnObjectMessage;
 import net.glowstone.net.message.play.player.InteractEntityMessage;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -19,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,6 +46,11 @@ public abstract class GlowMinecart extends GlowEntity implements Minecart {
         return Collections.singletonList(new SpawnObjectMessage(id, getUniqueId(), 10, x, y, z, pitch, yaw, type.ordinal()));
     }
 
+    @Override
+    public List<GamePacket> createSpawnMessageForPocket() {
+        return Arrays.asList();
+    }
+    
     @Override
     public boolean entityInteract(GlowPlayer player, InteractEntityMessage message) {
         if (message.getAction() == InteractEntityMessage.Action.ATTACK.ordinal()) {
