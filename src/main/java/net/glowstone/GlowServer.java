@@ -1096,7 +1096,7 @@ public final class GlowServer implements Server {
 
     @Override
     public String getName() {
-        return getClass().getPackage().getImplementationTitle();
+        return getClass().getPackage().getImplementationTitle() == null ? "SequinLand-Glowstone" : getClass().getPackage().getImplementationTitle();
     }
 
     @Override

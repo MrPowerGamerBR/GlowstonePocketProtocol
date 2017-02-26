@@ -576,8 +576,8 @@ public abstract class GlowEntity implements Entity {
 
         boolean teleport = dx > Short.MAX_VALUE || dy > Short.MAX_VALUE || dz > Short.MAX_VALUE || dx < Short.MIN_VALUE || dy < Short.MIN_VALUE || dz < Short.MIN_VALUE;
 
-        int yaw = Position.getIntYaw(location);
-        int pitch = Position.getIntPitch(location);
+        float yaw = location.getYaw();
+        float pitch = location.getPitch();
 
         List<GamePacket> result = new LinkedList<>();
         if (teleport || moved || rotated) {
