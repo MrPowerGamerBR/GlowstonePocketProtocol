@@ -52,6 +52,8 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.pocketdreams.sequinland.network.PocketSession;
+import net.pocketdreams.sequinland.network.protocol.packets.ContainerSetContentPacket;
+import net.pocketdreams.sequinland.network.protocol.packets.ContainerSetSlotPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.FullChunkDataPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
 import net.pocketdreams.sequinland.network.protocol.packets.MovePlayerPacket;
@@ -2489,13 +2491,21 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     @Override
     public void updateInventory() {
-        session.send(new SetWindowContentsMessage(invMonitor.getId(), invMonitor.getContents()));
+        if (this.isPocketProtocol()) {
+            this.getPocketSession().sendPocket(new ContainerSetContentPacket(invMonitor.getId(), invMonitor.getContents(), new int[0]));
+        } else {
+            session.send(new SetWindowContentsMessage(invMonitor.getId(), invMonitor.getContents()));
+        }
         ItemStack offHand = getInventory().getItemInOffHand();
         session.send(new SetWindowSlotMessage(invMonitor.getId(), 45, InventoryUtil.itemOrEmpty(offHand)));
     }
 
     public void sendItemChange(int slot, ItemStack item) {
-        session.send(new SetWindowSlotMessage(invMonitor.getId(), slot, item));
+        if (this.isPocketProtocol()) {
+            this.getPocketSession().sendPocket(new ContainerSetSlotPacket(invMonitor.getId(), slot, 0, item, (byte) 0).andEncode());
+        } else {
+            session.send(new SetWindowSlotMessage(invMonitor.getId(), slot, item));
+        }
     }
 
     @Override
