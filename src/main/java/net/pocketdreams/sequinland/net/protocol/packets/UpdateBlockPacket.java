@@ -7,8 +7,8 @@ import net.pocketdreams.sequinland.net.protocol.ProtocolInfo;
 @AllArgsConstructor
 public class UpdateBlockPacket extends GamePacket {
     public int x;
-    public int z;
     public int y;
+    public int z;
     public int blockId;
     public int blockData;
     
