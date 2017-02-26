@@ -13,6 +13,11 @@ public class TextPacket extends GamePacket {
         super(packet);
     }
     
+    public TextPacket(String message, byte type) {
+        this.message = message;
+        this.type = type;
+    }
+    
     @Override
     public short getPacketId() {
         return ProtocolInfo.TEXT_PACKET;

@@ -53,6 +53,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.pocketdreams.sequinland.net.PocketSession;
 import net.pocketdreams.sequinland.net.protocol.packets.SetTimePacket;
+import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
 
 import org.bukkit.*;
 import org.bukkit.Effect.Type;
@@ -1612,7 +1613,11 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
     @Override
     public void sendRawMessage(String message) {
         // old-style formatting to json conversion is in TextMessage
-        session.send(new ChatMessage(message));
+        if (this.isPocketProtocol()) {
+            this.getPocketSession().sendPocket(new TextPacket(message, TextPacket.TYPE_RAW).andEncode());
+        } else {
+            session.send(new ChatMessage(message));
+        }
     }
 
     @Override
@@ -2069,7 +2074,25 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     @Override
     public void sendMessage(ChatMessageType chatMessageType, BaseComponent... baseComponents) {
-        session.send(new ChatMessage(TextMessage.decode(ComponentSerializer.toString(baseComponents)), chatMessageType.ordinal()));
+        if (this.isPocketProtocol()) { 
+            byte type = TextPacket.TYPE_RAW;
+            switch (chatMessageType) {
+            case ACTION_BAR:
+                type = TextPacket.TYPE_TIP;
+                break;
+            case CHAT:
+                type = TextPacket.TYPE_CHAT;
+                break;
+            case SYSTEM:
+                type = TextPacket.TYPE_SYSTEM;
+                break;
+            default:
+                break;
+            }
+            this.getPocketSession().sendPocket(new TextPacket(TextMessage.decode(ComponentSerializer.toString(baseComponents)).flatten(), type).andEncode());
+        } else {
+            session.send(new ChatMessage(TextMessage.decode(ComponentSerializer.toString(baseComponents)), chatMessageType.ordinal()));
+        }
     }
 
     @Override
