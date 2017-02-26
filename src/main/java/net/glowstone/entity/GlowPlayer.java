@@ -411,7 +411,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         if (this.isPocketProtocol()) {
             this.getPocketSession().sendPocket(new UpdateAttributesPacket(SELF_ID,
                     new PocketAttribute[] {
-                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).clone().withVal((float) this.getHealth()),
+                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).clone().withVal(20).withMax(20),
                             PocketAttribute.getAttributeByName(AttributeName.HUNGER).clone().withVal((float) this.getFoodLevel()),
                             PocketAttribute.getAttributeByName(AttributeName.SATURATION).clone().withVal((float) this.getSaturation()),
                             PocketAttribute.getAttributeByName(AttributeName.ABSORPTION).clone(),
@@ -1483,7 +1483,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
         if (this.isPocketProtocol()) {
             this.getPocketSession().sendPocket(new UpdateAttributesPacket(SELF_ID,
                     new PocketAttribute[] {
-                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).clone().withVal((float) this.getHealth()),
+                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).clone().withVal(20).withMax(20),
                             PocketAttribute.getAttributeByName(AttributeName.HUNGER).clone().withVal((float) this.getFoodLevel()),
                             PocketAttribute.getAttributeByName(AttributeName.SATURATION).clone().withVal((float) this.getSaturation())
                     }).andEncode());
