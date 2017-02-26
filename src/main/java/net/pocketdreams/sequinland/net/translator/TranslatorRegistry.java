@@ -34,7 +34,6 @@ import net.glowstone.net.message.play.entity.VehicleMoveMessage;
 import net.glowstone.net.message.play.game.BlockActionMessage;
 import net.glowstone.net.message.play.game.BlockChangeMessage;
 import net.glowstone.net.message.play.game.ChatMessage;
-import net.glowstone.net.message.play.game.ChunkDataLegacyMessage;
 import net.glowstone.net.message.play.game.ChunkDataMessage;
 import net.glowstone.net.message.play.game.ClientSettingsMessage;
 import net.glowstone.net.message.play.game.ExperienceMessage;
@@ -137,7 +136,6 @@ public final class TranslatorRegistry {
         PC_TO_PE_TRANSLATORS.put(BlockActionMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(BlockChangeMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(ChatMessage.class, new IgnorePacketTranslator());
-        PC_TO_PE_TRANSLATORS.put(ChunkDataLegacyMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(ChunkDataMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(ClientSettingsMessage.class, new IgnorePacketTranslator());
         PC_TO_PE_TRANSLATORS.put(ExperienceMessage.class, new IgnorePacketTranslator());
