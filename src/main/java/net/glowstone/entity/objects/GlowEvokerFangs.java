@@ -4,7 +4,7 @@ import com.flowpowered.network.Message;
 import net.glowstone.entity.GlowEntity;
 import net.glowstone.net.message.play.entity.SpawnObjectMessage;
 import net.glowstone.util.Position;
-import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
 
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;

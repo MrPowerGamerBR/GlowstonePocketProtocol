@@ -17,8 +17,8 @@ import net.glowstone.entity.physics.EntityBoundingBox;
 import net.glowstone.net.message.play.entity.*;
 import net.glowstone.net.message.play.player.InteractEntityMessage;
 import net.glowstone.util.Position;
-import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
-import net.pocketdreams.sequinland.net.protocol.packets.MoveEntityPacket;
+import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.network.protocol.packets.MoveEntityPacket;
 
 import org.bukkit.*;
 import org.bukkit.World.Environment;

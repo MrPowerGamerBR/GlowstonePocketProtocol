@@ -10,8 +10,8 @@ import net.glowstone.net.message.play.entity.EntityHeadRotationMessage;
 import net.glowstone.net.message.play.entity.SpawnPlayerMessage;
 import net.glowstone.util.InventoryUtil;
 import net.glowstone.util.Position;
-import net.pocketdreams.sequinland.net.protocol.packets.AddPlayerPacket;
-import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.network.protocol.packets.AddPlayerPacket;
+import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;

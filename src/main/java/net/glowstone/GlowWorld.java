@@ -25,7 +25,7 @@ import net.glowstone.net.message.play.player.ServerDifficultyMessage;
 import net.glowstone.util.BlockStateDelegate;
 import net.glowstone.util.GameRuleManager;
 import net.glowstone.util.collection.ConcurrentSet;
-import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
 
 import org.bukkit.*;
 import org.bukkit.block.Biome;

@@ -6,7 +6,7 @@ import net.glowstone.entity.meta.MetadataIndex;
 import net.glowstone.net.message.play.entity.EntityHeadRotationMessage;
 import net.glowstone.net.message.play.entity.SpawnMobMessage;
 import net.glowstone.util.Position;
-import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
 
 import org.bukkit.Location;
 import org.bukkit.Sound;

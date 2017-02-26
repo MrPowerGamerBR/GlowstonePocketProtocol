@@ -2,10 +2,10 @@ package net.pocketdreams.sequinland.util;
 
 import net.marfgamer.jraknet.protocol.Reliability;
 import net.marfgamer.jraknet.session.RakNetClientSession;
-import net.pocketdreams.sequinland.net.PocketNetworkManager;
-import net.pocketdreams.sequinland.net.protocol.ProtocolInfo;
-import net.pocketdreams.sequinland.net.protocol.packets.BatchPacket;
-import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.network.PocketNetworkManager;
+import net.pocketdreams.sequinland.network.protocol.ProtocolInfo;
+import net.pocketdreams.sequinland.network.protocol.packets.BatchPacket;
+import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
 import net.pocketdreams.sequinland.util.nukkit.Binary;
 import net.pocketdreams.sequinland.util.nukkit.BinaryStream;
 import net.pocketdreams.sequinland.util.nukkit.Zlib;

@@ -39,7 +39,7 @@ import net.glowstone.util.bans.UuidListFile;
 import net.glowstone.util.loot.LootingManager;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.pocketdreams.sequinland.net.PocketNetworkManager;
+import net.pocketdreams.sequinland.network.PocketNetworkManager;
 
 import org.bukkit.*;
 import org.bukkit.BanList.Type;
