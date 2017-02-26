@@ -7,6 +7,7 @@ import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
 import net.marfgamer.jraknet.protocol.Reliability;
 import net.pocketdreams.sequinland.util.VarInt;
+import net.pocketdreams.sequinland.util.attributes.PocketAttribute;
 import net.pocketdreams.sequinland.util.nukkit.Binary;
 import net.pocketdreams.sequinland.util.nukkit.Vector2;
 import net.pocketdreams.sequinland.util.nukkit.Vector2f;
@@ -329,6 +330,15 @@ public class GamePacket extends RakNetPacket {
 
     public GamePacket writeUUID(UUID uuid) {
         this.write(Binary.writeUUID(uuid));
+        return this;
+    }
+    
+    public GamePacket writeAttribute(PocketAttribute attribute) {
+        this.writeLFloat(attribute.getMin());
+        this.writeLFloat(attribute.getMax());
+        this.writeLFloat(attribute.getVal());
+        this.writeLFloat(attribute.getDef());
+        this.writeVarString(attribute.getName());
         return this;
     }
     

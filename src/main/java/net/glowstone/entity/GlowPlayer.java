@@ -58,8 +58,11 @@ import net.pocketdreams.sequinland.net.protocol.packets.PlayStatusPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.SetTimePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.StartGamePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.TextPacket;
+import net.pocketdreams.sequinland.net.protocol.packets.UpdateAttributesPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.UpdateBlockPacket;
 import net.pocketdreams.sequinland.util.PocketChunkUtils;
+import net.pocketdreams.sequinland.util.attributes.PocketAttribute;
+import net.pocketdreams.sequinland.util.attributes.PocketAttribute.AttributeName;
 
 import org.bukkit.*;
 import org.bukkit.Effect.Type;
@@ -371,7 +374,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
             gameMode |= 0x8;
         }
         if (this.isPocketProtocol()) {
-            this.getPocketSession().sendPocket(new StartGamePacket((long) SELF_ID, (long) SELF_ID, (float) location.getX(), (float) (location.getY() + 1.62F), (float) location.getZ(), 1337, (byte) world.getEnvironment().getId(), 1, 1, world.getDifficulty().getValue(), world.getSpawnLocation().getBlockX(), world.getSpawnLocation().getBlockY(), world.getSpawnLocation().getBlockZ(), true, -1, false, 0, 0, true, false, "", "Shantae is cute").andEncode());
+            this.getPocketSession().sendPocket(new StartGamePacket((long) SELF_ID, (long) SELF_ID, (float) location.getX(), (float) (location.getY() + 1.62F), (float) location.getZ(), 1337, (byte) world.getEnvironment().getId(), gameMode, 1, world.getDifficulty().getValue(), world.getSpawnLocation().getBlockX(), world.getSpawnLocation().getBlockY(), world.getSpawnLocation().getBlockZ(), true, -1, false, 0, 0, true, false, "", "Shantae is cute").andEncode());
         } else {
             session.send(new JoinGameMessage(SELF_ID, gameMode, world.getEnvironment().getId(), world.getDifficulty().getValue(), session.getServer().getMaxPlayers(), type, world.getGameRuleMap().getBoolean("reducedDebugInfo")));
         }
@@ -406,6 +409,10 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
         // send initial location
         if (this.isPocketProtocol()) {
+            this.getPocketSession().sendPocket(new UpdateAttributesPacket(SELF_ID,
+                    new PocketAttribute[] {
+                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).withVal((float) this.getHealth())
+                    }).andEncode());
             this.getPocketSession().sendPocket(new PlayStatusPacket(PlayStatusPacket.SPAWNED).andEncode());
         } else {
             session.send(new PositionRotationMessage(location));
@@ -1466,7 +1473,15 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     private void sendHealth() {
         float finalHealth = (float) (getHealth() / getMaxHealth() * getHealthScale());
-        session.send(new HealthMessage(finalHealth, getFoodLevel(), getSaturation()));
+        if (this.isPocketProtocol()) {
+            this.getPocketSession().sendPocket(new UpdateAttributesPacket(SELF_ID,
+                    new PocketAttribute[] {
+                            PocketAttribute.getAttributeByName(AttributeName.HEALTH).withVal((float) this.getHealth())
+                    }).andEncode());
+        }
+        else {
+            session.send(new HealthMessage(finalHealth, getFoodLevel(), getSaturation()));
+        }
     }
 
     /**
