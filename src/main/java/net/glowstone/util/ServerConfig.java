@@ -326,7 +326,7 @@ public final class ServerConfig {
         SERVER_PORT("server.port", 25565, Migrate.PROPS, "server-port"),
         SERVER_NAME("server.name", "Glowstone Server", Migrate.PROPS, "server-name"),
         LOG_FILE("server.log-file", "logs/log-%D.txt"),
-        ONLINE_MODE("server.online-mode", true, Migrate.PROPS, "online-mode"),
+        ONLINE_MODE("server.online-mode", false, Migrate.PROPS, "online-mode"), // offline mode should be off by default
         MAX_PLAYERS("server.max-players", 20, Migrate.PROPS, "max-players"),
         WHITELIST("server.whitelisted", false, Migrate.PROPS, "white-list"),
         MOTD("server.motd", "Glowstone server", Migrate.PROPS, "motd"),
@@ -418,7 +418,11 @@ public final class ServerConfig {
         DB_URL("database.url", "jdbc:sqlite:config/database.db", Migrate.BUKKIT, "database.url"),
         DB_USERNAME("database.username", "glowstone", Migrate.BUKKIT, "database.username"),
         DB_PASSWORD("database.password", "nether", Migrate.BUKKIT, "database.password"),
-        DB_ISOLATION("database.isolation", "SERIALIZABLE", Migrate.BUKKIT, "database.isolation");
+        DB_ISOLATION("database.isolation", "SERIALIZABLE", Migrate.BUKKIT, "database.isolation"),
+
+        // SequinLand-Glowstone
+        PE_PORT("pe.port", 19132),
+        PE_ENABLE("pe.enable", true);
 
         private final String path;
         private final Object def;

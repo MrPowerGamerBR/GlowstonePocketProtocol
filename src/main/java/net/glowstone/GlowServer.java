@@ -456,14 +456,21 @@ public final class GlowServer implements Server {
         consoleManager.startConsole(config.getBoolean(Key.USE_JLINE));
         consoleManager.startFile(config.getString(Key.LOG_FILE));
 
-        if (getProxySupport()) {
-            if (getOnlineMode()) {
-                logger.warning("Proxy support is enabled, but online mode is enabled.");
+        if (getOnlineMode()) {
+            if (getPeEnabled()) {
+                logger.severe("Online mode and PE mode are both enabled, this doesn't work. Disable one or the other and then start the server back up!");
+                System.exit(0);
             } else {
-                logger.info("Proxy support is enabled.");
+                logger.info("Online mode enabled!");
             }
-        } else if (!getOnlineMode()) {
-            logger.warning("The server is running in offline mode! Only do this if you know what you're doing.");
+        }
+        if (getPePort() > 0 && getPePort() < 65535) { //check if port is a valid port
+            if (getPeEnabled()) {
+                logger.info("PE support enabled on UDP port" + getPePort());
+            }
+        } else {
+            logger.info("PE port is not valid, not initilazing PE support");
+            config.set(Key.PE_ENABLE, false);
         }
 
         // Load player lists
@@ -595,7 +602,7 @@ public final class GlowServer implements Server {
     }
 
     private void pocketBind() {
-        pocketNet = new PocketNetworkManager(19132, this.getMaxPlayers(), this);
+        pocketNet = new PocketNetworkManager(getPePort(), this.getMaxPlayers(), this);
         pocketNet.startThreaded();
     }
     
@@ -1783,6 +1790,14 @@ public final class GlowServer implements Server {
     @Override
     public boolean getOnlineMode() {
         return config.getBoolean(Key.ONLINE_MODE);
+    }
+
+    public boolean getPeEnabled() {
+        return config.getBoolean(Key.PE_ENABLE);
+    }
+
+    public int getPePort()  {
+        return config.getInt(Key.PE_PORT);
     }
 
     @Override
