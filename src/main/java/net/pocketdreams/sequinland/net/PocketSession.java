@@ -40,8 +40,6 @@ public class PocketSession extends GlowSession {
     }
 
     private JoinGameMessage stored;
-    private ArrayList<FullChunkDataPacket> delayed = new ArrayList<FullChunkDataPacket>();
-    private ArrayList<FullChunkDataPacket> dataPacket = new ArrayList<FullChunkDataPacket>();
     
     @Override
     public void send(Message message) {
@@ -54,12 +52,7 @@ public class PocketSession extends GlowSession {
             pePacket.chunkZ = pcPacket.getZ();
             pePacket.payload = PocketChunkUtils.translateToPocket(pcPacket.getChunk());
             pePacket.encode();
-            if (stored != null) {
-                // delayed.add(pePacket);
-                dataPacket.add(pePacket);
-            } else {
-                session.sendMessage(Reliability.RELIABLE, pePacket);
-            }
+            session.sendMessage(Reliability.RELIABLE, pePacket);
             return;
         }
         if (message instanceof ChatMessage) {
@@ -112,27 +105,6 @@ public class PocketSession extends GlowSession {
                 pkStart.encode();
                 session.sendMessage(Reliability.RELIABLE, pkStart);
 
-                // Fill the spawn position with... nothingness
-                for (int x = -3; 3 >= x; x++) {
-                    for (int z = -3; 3 >= z; z++) {
-                        if (x == 0 && z == 0) {
-                            continue;
-                        }
-                        FullChunkDataPacket pePacket = new FullChunkDataPacket();
-                        pePacket.chunkX = x;
-                        pePacket.chunkZ = z;
-                        pePacket.payload = PocketChunkUtils.requestEmptyChunk();
-                        pePacket.encode();
-
-                        session.sendMessage(Reliability.RELIABLE, pePacket);
-                    }
-                }
-
-                // for (FullChunkDataPacket f : delayed) {
-                //     session.sendMessage(Reliability.RELIABLE, f);
-                // }
-                SequinUtils.batchPackets(session, delayed.toArray(new FullChunkDataPacket[0]));
-                delayed.clear();
                 PlayStatusPacket pkPlay = new PlayStatusPacket();
                 pkPlay.status = PlayStatusPacket.SPAWNED;
                 pkPlay.encode();
