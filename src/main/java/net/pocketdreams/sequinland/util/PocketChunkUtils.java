@@ -136,8 +136,8 @@ public class PocketChunkUtils {
                     int id2 = chk.getBlock(x, (y + 1) + (16 * currentSection), z).getTypeId();
                     blocks[(i << 1) | y] = (byte) id;
                     blocks[(i << 1) | (y + 1)] = (byte) id2;
-                    int b1 = 0;
-                    int b2 = 0;
+                    int b1 = chk.getBlock(x, y + (16 * currentSection), z).getData();
+                    int b2 = chk.getBlock(x, (y + 1) + (16 * currentSection), z).getData();
                     data[i | (y >> 1)] = (byte) ((b2 << 4) | b1);
                     // Here comes the super duper workaround because 0, 16 is outside of the chunk section(tm)!
                     // (patent pending)
