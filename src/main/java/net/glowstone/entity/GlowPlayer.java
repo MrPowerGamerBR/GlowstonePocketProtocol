@@ -54,6 +54,7 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import net.pocketdreams.sequinland.net.PocketSession;
 import net.pocketdreams.sequinland.net.protocol.packets.FullChunkDataPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.net.protocol.packets.MovePlayerPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.PlayStatusPacket;
 import net.pocketdreams.sequinland.net.protocol.packets.SetTimePacket;
 import net.pocketdreams.sequinland.net.protocol.packets.StartGamePacket;
@@ -1525,7 +1526,11 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
             world.getEntityManager().move(this, location);
             //Position.copyLocation(location, this.previousLocation);
             //Position.copyLocation(location, this.location);
-            session.send(new PositionRotationMessage(location));
+            if (this.isPocketProtocol()) {
+                this.getPocketSession().sendPocket(new MovePlayerPacket(SELF_ID, (float) location.getX(), (float) location.getY() + 1.62F, (float) location.getZ(), location.getYaw(), location.getYaw(), location.getPitch(), MovePlayerPacket.MODE_RESET, false).andEncode());
+            } else {
+                session.send(new PositionRotationMessage(location));
+            }
             teleportedTo = location.clone();
         }
 

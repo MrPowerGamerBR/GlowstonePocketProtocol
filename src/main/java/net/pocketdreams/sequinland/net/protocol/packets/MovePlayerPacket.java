@@ -1,9 +1,11 @@
 package net.pocketdreams.sequinland.net.protocol.packets;
 
+import lombok.AllArgsConstructor;
 import net.marfgamer.jraknet.Packet;
 import net.pocketdreams.sequinland.net.protocol.ProtocolInfo;
 import net.pocketdreams.sequinland.util.nukkit.Vector3f;
 
+@AllArgsConstructor
 public class MovePlayerPacket extends GamePacket {
     public static final byte MODE_NORMAL = 0;
     public static final byte MODE_RESET = 1;
