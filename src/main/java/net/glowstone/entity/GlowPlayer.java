@@ -374,7 +374,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
             gameMode |= 0x8;
         }
         if (this.isPocketProtocol()) {
-            this.getPocketSession().sendPocket(new StartGamePacket((long) SELF_ID, (long) SELF_ID, (float) location.getX(), (float) (location.getY() + 1.62F), (float) location.getZ(), 1337, (byte) world.getEnvironment().getId(), gameMode, 1, world.getDifficulty().getValue(), world.getSpawnLocation().getBlockX(), world.getSpawnLocation().getBlockY(), world.getSpawnLocation().getBlockZ(), true, -1, false, 0, 0, true, false, "", "Shantae is cute").andEncode());
+            this.getPocketSession().sendPocket(new StartGamePacket((long) SELF_ID, (long) SELF_ID, (float) location.getX(), (float) (location.getY() + 1.62F), (float) location.getZ(), 1337, (byte) world.getEnvironment().getId(), 1, this.getGameMode().getValue(), world.getDifficulty().getValue(), world.getSpawnLocation().getBlockX(), world.getSpawnLocation().getBlockY(), world.getSpawnLocation().getBlockZ(), true, -1, false, 0, 0, true, false, "", "Shantae is cute").andEncode());
         } else {
             session.send(new JoinGameMessage(SELF_ID, gameMode, world.getEnvironment().getId(), world.getDifficulty().getValue(), session.getServer().getMaxPlayers(), type, world.getGameRuleMap().getBoolean("reducedDebugInfo")));
         }
