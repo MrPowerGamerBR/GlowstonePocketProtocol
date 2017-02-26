@@ -2,15 +2,16 @@
 [![Join the Discord chat](https://img.shields.io/badge/discord-glowstone-738bd7.svg?style=flat-square)](https://discord.gg/TFJqhsC)
 [![Build Status](https://circleci.com/gh/GlowstoneMC/Glowstone/tree/master.png)](https://circleci.com/gh/GlowstoneMC/Glowstone/tree/master)
 
-# Glowstone
+# GlowstonePocket
 
 A fast, customizable and compatible open source Minecraft server.
 
 ## Introduction
 
-Glowstone is a lightweight, from scratch, open source
+GlowstonePocket is a lightweight, from scratch, open source
 [Minecraft](http://minecraft.net) server written in Java that supports plugins
-written for the [Spigot](https://spigotmc.org) (and Bukkit) API.
+written for the [Spigot](https://spigotmc.org) (and Bukkit) API based on [Glowstone](https://github.com/GlowstoneMC/Glowstone/).
+It aims to support MCPE as well ad MCPC!
 
 The main goals of the project are to provide a lightweight implementation
 of the Spigot API and Minecraft server where exact vanilla functionality is
@@ -33,6 +34,7 @@ Glowstone has a few key advantages over CraftBukkit:
  * Glowstone's simplicity affords it a performance improvement over CraftBukkit
    and other servers, making it especially suited for situations where a large
    amount of players must be supported but vanilla game features are not needed.
+ * GlowstonePocket allows for PE players to join the server
  
 However, there are several drawbacks:
  * Glowstone **is not finished**. Nothing is guaranteed to work, though many things

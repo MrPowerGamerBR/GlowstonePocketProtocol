@@ -8,6 +8,8 @@ import net.glowstone.net.ProxyData;
 import net.glowstone.net.message.login.EncryptionKeyRequestMessage;
 import net.glowstone.net.message.login.LoginStartMessage;
 import net.glowstone.util.SecurityUtils;
+import net.pocketdreams.sequinland.net.PocketSession;
+
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
@@ -20,7 +22,7 @@ public final class LoginStartHandler implements MessageHandler<GlowSession, Logi
     public void handle(GlowSession session, LoginStartMessage message) {
         String name = message.getUsername();
 
-        if (session.getServer().getOnlineMode()) {
+        if (session.getServer().getOnlineMode() && !(session instanceof PocketSession)) {
             // Get necessary information to create our request message
             String sessionId = session.getSessionId();
             byte[] publicKey = SecurityUtils.generateX509Key(session.getServer().getKeyPair().getPublic()).getEncoded(); //Convert to X509 format

@@ -8,7 +8,8 @@ import io.netty.channel.Channel;
 import net.glowstone.GlowServer;
 import net.glowstone.net.GlowSession;
 import net.glowstone.net.message.SetCompressionMessage;
-import net.glowstone.net.message.login.LoginSuccessMessage;
+import net.glowstone.net.message.login.EncryptionKeyRequestMessage;
+import net.glowstone.net.message.login.LoginStartMessage;
 import net.glowstone.net.message.play.game.ChatMessage;
 import net.glowstone.net.message.play.game.ChunkDataMessage;
 import net.glowstone.net.message.play.game.JoinGameMessage;
@@ -77,27 +78,34 @@ public class PocketSession extends GlowSession {
             // JoinGameMessage pcPacket = (JoinGameMessage) message;
             // StartGamePacket pkStart = new StartGamePacket();
             stored = (JoinGameMessage) message; // Store it for later
-            return;
-        }
-        if (message instanceof PositionRotationMessage) {
+            
             if (stored != null) {                
                 // We are going to start the game then.
-                JoinGameMessage joinPacket = stored;
-                PositionRotationMessage posPacket = (PositionRotationMessage) message;
+            	PlayStatusPacket pkPlay = new PlayStatusPacket();
+                pkPlay.status = PlayStatusPacket.OK;
+                pkPlay.encode();
+                session.sendMessage(Reliability.RELIABLE_ORDERED, pkPlay);
+                
+                ResourcePacksInfoPacket pkRp = new ResourcePacksInfoPacket();
+                pkRp.mustAccept = false;
+                pkRp.encode();
+                session.sendMessage(Reliability.RELIABLE_ORDERED, pkRp);
+            	
+                //PositionRotationMessage posPacket = (PositionRotationMessage) message;
                 StartGamePacket pkStart = new StartGamePacket();
                 pkStart.x = (float) posPacket.getX();
                 pkStart.y = (float) posPacket.getY() + 1.62F;
                 pkStart.z = (float) posPacket.getZ();
                 pkStart.commandsEnabled = true;
                 pkStart.dayCycleStopTime = 0;
-                pkStart.difficulty = joinPacket.getDifficulty();
-                pkStart.dimension = (byte) joinPacket.getDimension();
+                pkStart.difficulty = stored.getDifficulty();
+                pkStart.dimension = (byte) stored.getDimension();
                 pkStart.eduMode = false;
                 pkStart.entityRuntimeId = joinPacket.getId();
                 pkStart.entityUniqueId = joinPacket.getId();
                 pkStart.gamemode = 1; // Default to creative
                 pkStart.spawnX = 0;
-                pkStart.spawnY = 70;
+                pkStart.spawnY = 128; //center of world
                 pkStart.spawnZ = 0;
                 pkStart.worldName = "Shantae is cute"; // The client doesn't care about the world name anyway
                 pkStart.encode();
@@ -120,6 +128,7 @@ public class PocketSession extends GlowSession {
                 session.sendMessage(Reliability.RELIABLE, availableCommandsPk);
                 return;
             }
+            return;
         }
         return;
     }

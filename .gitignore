@@ -24,3 +24,5 @@ dependency-reduced-pom.xml
 .project
 .settings/
 .db
+run/*
+run/
