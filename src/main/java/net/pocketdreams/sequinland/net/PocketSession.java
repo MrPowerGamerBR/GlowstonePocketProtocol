@@ -45,6 +45,11 @@ public class PocketSession extends GlowSession {
     @Override
     public void send(Message message) {
         // TODO: Better message translator, come on, look at this mess!
+        // TODO: This is only kept to translate PC -> PE packets, sending packets
+        // should be handled in the GlowPlayer class!
+        
+        // So, this means that this is only kept for plugins that are sending packets
+        // (ProtocolLib)
         System.out.println("Sending " + message.getClass().getSimpleName() + " to client!");
         if (message instanceof ChunkDataMessage) {
             ChunkDataMessage pcPacket = (ChunkDataMessage) message;
