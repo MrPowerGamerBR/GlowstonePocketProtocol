@@ -26,16 +26,18 @@ public class PocketNetworkManager extends RakNetServer {
         
     static HashMap<RakNetClientSession, PocketSession> sessions = new HashMap<>();
     
+    private static UUID randomUUID = UUID.randomUUID();
+    
     public PocketNetworkManager(int port, int maxConnections, GlowServer server) {
         super(port, maxConnections, new MCPEIdentifier(server.getMotd(), ProtocolInfo.CURRENT_PROTOCOL, ProtocolInfo.MINECRAFT_VERSION_NETWORK, server.getOnlinePlayers().size(),
-                server.getMaxPlayers(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE, "New World", "Survival"));
+                server.getMaxPlayers(), randomUUID.getMostSignificantBits() & Long.MAX_VALUE, "New World", "Survival"));
         this.server = server;
     }
     
     @Override
     public void handlePing(ServerPing ping) {
         ping.setIdentifier(new MCPEIdentifier(server.getMotd(), ProtocolInfo.CURRENT_PROTOCOL, ProtocolInfo.MINECRAFT_VERSION_NETWORK, server.getOnlinePlayers().size(),
-                server.getMaxPlayers(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE, "New World", "Survival"));
+                server.getMaxPlayers(), randomUUID.getMostSignificantBits() & Long.MAX_VALUE, "New World", "Survival"));
     }
     
     @Override
@@ -64,6 +66,7 @@ public class PocketNetworkManager extends RakNetServer {
     
     @Override
     public void onClientDisconnect(RakNetClientSession session, String reason) {
+        System.out.println("Client " + session + " disconnected due to " + reason);
         PocketSession pocketSession = sessions.get(session);
         pocketSession.disconnect(reason);
         server.getSessionRegistry().remove(pocketSession);
