@@ -595,7 +595,12 @@ public final class GlowServer implements Server {
     }
 
     private void pocketBind() {
-        pocketNet = new PocketNetworkManager(19132, this.getMaxPlayers(), this);
+        try {
+            pocketNet = new PocketNetworkManager(19132, this.getMaxPlayers(), this);
+        } catch (NullPointerException e)    {
+            pocketNet = new PocketNetworkManager(19132, this.getMaxPlayers(), this, 1492);
+            //this solves an annoying NPE
+        }
         pocketNet.startThreaded();
     }
     
