@@ -13,6 +13,7 @@ import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
 import net.marfgamer.jraknet.identifier.MCPEIdentifier;
 import net.marfgamer.jraknet.server.RakNetServer;
+import net.marfgamer.jraknet.server.ServerPing;
 import net.marfgamer.jraknet.session.RakNetClientSession;
 import net.pocketdreams.sequinland.net.protocol.ProtocolInfo;
 import net.pocketdreams.sequinland.net.protocol.packets.GamePacket;
@@ -29,6 +30,12 @@ public class PocketNetworkManager extends RakNetServer {
         super(port, maxConnections, new MCPEIdentifier(server.getMotd(), ProtocolInfo.CURRENT_PROTOCOL, ProtocolInfo.MINECRAFT_VERSION_NETWORK, server.getOnlinePlayers().size(),
                 server.getMaxPlayers(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE, "New World", "Survival"));
         this.server = server;
+    }
+    
+    @Override
+    public void handlePing(ServerPing ping) {
+        ping.setIdentifier(new MCPEIdentifier(server.getMotd(), ProtocolInfo.CURRENT_PROTOCOL, ProtocolInfo.MINECRAFT_VERSION_NETWORK, server.getOnlinePlayers().size(),
+                server.getMaxPlayers(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE, "New World", "Survival"));
     }
     
     @Override
