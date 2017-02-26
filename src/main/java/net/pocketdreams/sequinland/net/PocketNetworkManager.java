@@ -32,6 +32,12 @@ public class PocketNetworkManager extends RakNetServer {
                 server.getMaxPlayers(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE, "New World", "Survival"));
         this.server = server;
     }
+
+    public PocketNetworkManager(int port, int maxConnections, GlowServer server, int mtu) {
+        super(port, maxConnections, mtu, new MCPEIdentifier(server.getMotd(), ProtocolInfo.CURRENT_PROTOCOL, ProtocolInfo.MINECRAFT_VERSION_NETWORK, server.getOnlinePlayers().size(),
+                server.getMaxPlayers(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE, "New World", "Survival"));
+        this.server = server;
+    }
     
     @Override
     public void onClientConnect(RakNetClientSession session) {
