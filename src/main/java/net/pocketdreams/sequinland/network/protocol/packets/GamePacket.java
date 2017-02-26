@@ -3,6 +3,9 @@ package net.pocketdreams.sequinland.network.protocol.packets;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
 import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
 import net.marfgamer.jraknet.protocol.Reliability;
@@ -339,6 +342,20 @@ public class GamePacket extends RakNetPacket {
         this.writeLFloat(attribute.getVal());
         this.writeLFloat(attribute.getDef());
         this.writeVarString(attribute.getName());
+        return this;
+    }
+    
+    public GamePacket writeItemStack(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            this.writeSignedVarInt(0);
+            return this;
+        }
+        
+        this.writeSignedVarInt(item.getTypeId());
+        int auxValue = ((item.hasItemMeta() ? item.getDurability() : -1) << 8) | item.getAmount();
+        this.writeSignedVarInt(auxValue);
+        // TODO: NBT tags
+        this.writeShortLE(0);
         return this;
     }
     

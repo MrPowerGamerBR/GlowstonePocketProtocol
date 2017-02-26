@@ -165,6 +165,7 @@ public abstract class GlowHumanEntity extends GlowLivingEntity implements HumanE
         pePacket.speedY = 0F;
         pePacket.speedZ = 0F;
         pePacket.username = this.getCustomName();
+        pePacket.heldItem = this.getItemInHand();
         pePacket.encode();
         result.add(pePacket);
         
