@@ -519,7 +519,7 @@ public class GlowSession extends BasicSession {
         }
     }
 
-    private void finalizeLogin(PlayerProfile profile) {
+    protected void finalizeLogin(PlayerProfile profile) {
         // enable compression if needed
         int compression = getServer().getCompressionThreshold();
         if (compression > 0) {

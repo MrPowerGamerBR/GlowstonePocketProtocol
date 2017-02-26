@@ -7,6 +7,7 @@ import com.flowpowered.network.Message;
 
 import io.netty.channel.Channel;
 import net.glowstone.GlowServer;
+import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.net.GlowSession;
 import net.glowstone.net.message.SetCompressionMessage;
 import net.glowstone.net.message.login.LoginSuccessMessage;
@@ -61,7 +62,7 @@ public class PocketSession extends GlowSession {
             session.sendMessage(Reliability.RELIABLE, pePacket);
             return;
         }
-        if (message instanceof ChatMessage) {
+        /* if (message instanceof ChatMessage) {
             ChatMessage pcPacket = (ChatMessage) message;
             TextPacket pkText = new TextPacket();
             pkText.message = pcPacket.getText().flatten();
@@ -69,8 +70,8 @@ public class PocketSession extends GlowSession {
             pkText.encode();
             session.sendMessage(Reliability.RELIABLE, pkText);
             return;
-        }
-        if (message instanceof LoginSuccessMessage) {
+        } */
+        /* if (message instanceof LoginSuccessMessage) {
             PlayStatusPacket pkPlay = new PlayStatusPacket();
             pkPlay.status = PlayStatusPacket.OK;
             pkPlay.encode();
@@ -80,13 +81,13 @@ public class PocketSession extends GlowSession {
             pkRp.encode();
             session.sendMessage(Reliability.RELIABLE, pkRp);
             return;
-        }
-        if (message instanceof JoinGameMessage) {
+        } */
+        /* if (message instanceof JoinGameMessage) {
             // JoinGameMessage pcPacket = (JoinGameMessage) message;
             // StartGamePacket pkStart = new StartGamePacket();
             stored = (JoinGameMessage) message; // Store it for later
             return;
-        }
+        } */
         /* if (message instanceof PositionRotationMessage) {
             if (stored != null) {                
                 // We are going to start the game then.
@@ -167,5 +168,20 @@ public class PocketSession extends GlowSession {
 
     public void sendPocket(GamePacket packet) {
         session.sendMessage(packet.reliability, packet);
+    }
+    
+    @Override
+    protected void finalizeLogin(PlayerProfile profile) {
+        // enable compression if needed
+        /* int compression = getServer().getCompressionThreshold();
+        if (compression > 0) {
+            enableCompression(compression);
+        } */
+
+        // send login response
+        // send(new LoginSuccessMessage(profile.getUniqueId().toString(), profile.getName()));
+        this.sendPocket(new PlayStatusPacket(PlayStatusPacket.OK).andEncode());
+        this.sendPocket(new ResourcePacksInfoPacket().andEncode());
+        setProtocol(ProtocolType.PLAY);
     }
 }
