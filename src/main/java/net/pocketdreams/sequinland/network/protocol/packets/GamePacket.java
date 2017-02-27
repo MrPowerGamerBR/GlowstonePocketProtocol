@@ -1,6 +1,7 @@
 package net.pocketdreams.sequinland.network.protocol.packets;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Material;
@@ -9,6 +10,17 @@ import org.bukkit.inventory.ItemStack;
 import net.marfgamer.jraknet.Packet;
 import net.marfgamer.jraknet.RakNetPacket;
 import net.marfgamer.jraknet.protocol.Reliability;
+import net.pocketdreams.sequinland.entity.PocketEntity;
+import net.pocketdreams.sequinland.entity.data.ByteEntityData;
+import net.pocketdreams.sequinland.entity.data.EntityData;
+import net.pocketdreams.sequinland.entity.data.EntityMetadata;
+import net.pocketdreams.sequinland.entity.data.FloatEntityData;
+import net.pocketdreams.sequinland.entity.data.IntEntityData;
+import net.pocketdreams.sequinland.entity.data.IntPositionEntityData;
+import net.pocketdreams.sequinland.entity.data.LongEntityData;
+import net.pocketdreams.sequinland.entity.data.ShortEntityData;
+import net.pocketdreams.sequinland.entity.data.StringEntityData;
+import net.pocketdreams.sequinland.entity.data.Vector3fEntityData;
 import net.pocketdreams.sequinland.util.VarInt;
 import net.pocketdreams.sequinland.util.attributes.PocketAttribute;
 import net.pocketdreams.sequinland.util.nukkit.Binary;
@@ -267,6 +279,57 @@ public class GamePacket extends RakNetPacket {
 
     public Vector3f readBlockCoords() {
         return new Vector3f(this.readSignedVarInt(), this.readUnsignedVarInt(), this.readSignedVarInt());
+    }
+    
+    public GamePacket writeMetadata(EntityMetadata metadata) {
+        Map<Integer, EntityData> map = metadata.getMap();
+        this.writeUnsignedVarInt(map.size());
+        for (int id : map.keySet()) {
+            EntityData d = map.get(id);
+            this.writeUnsignedVarInt(id);
+            this.writeUnsignedVarInt(d.getType());
+            switch (d.getType()) {
+                case PocketEntity.DATA_TYPE_BYTE:
+                    this.writeByte(((ByteEntityData) d).getData().byteValue());
+                    break;
+                case PocketEntity.DATA_TYPE_SHORT:
+                    this.writeShortLE(((ShortEntityData) d).getData());
+                    break;
+                case PocketEntity.DATA_TYPE_INT:
+                    this.writeSignedVarInt(((IntEntityData) d).getData());
+                    break;
+                case PocketEntity.DATA_TYPE_FLOAT:
+                    this.writeLFloat(((FloatEntityData) d).getData());
+                    break;
+                case PocketEntity.DATA_TYPE_STRING:
+                    String s = ((StringEntityData) d).getData();
+                    this.writeUnsignedVarInt(s.getBytes(StandardCharsets.UTF_8).length);
+                    this.write(s.getBytes(StandardCharsets.UTF_8));
+                    break;
+                case PocketEntity.DATA_TYPE_SLOT:
+                    /* SlotEntityData slot = (SlotEntityData) d;
+                    this.putLShort(slot.blockId);
+                    this.putByte((byte) slot.meta);
+                    this.putLShort(slot.count); */
+                    break;
+                case PocketEntity.DATA_TYPE_POS:
+                    IntPositionEntityData pos = (IntPositionEntityData) d;
+                    this.writeSignedVarInt(pos.x);
+                    this.writeByte((byte) pos.y);
+                    this.writeSignedVarInt(pos.z);
+                    break;
+                case PocketEntity.DATA_TYPE_LONG:
+                    this.writeSignedVarLong(((LongEntityData) d).getData());
+                    break;
+                case PocketEntity.DATA_TYPE_VECTOR3F:
+                    Vector3fEntityData v3data = (Vector3fEntityData) d;
+                    this.writeLFloat(v3data.x);
+                    this.writeLFloat(v3data.y);
+                    this.writeLFloat(v3data.z);
+                    break;
+            }
+        }
+        return this;
     }
     
     /**

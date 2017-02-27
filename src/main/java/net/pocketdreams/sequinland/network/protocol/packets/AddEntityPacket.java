@@ -1,6 +1,8 @@
 package net.pocketdreams.sequinland.network.protocol.packets;
 
 import net.marfgamer.jraknet.Packet;
+import net.pocketdreams.sequinland.entity.PocketEntity;
+import net.pocketdreams.sequinland.entity.data.EntityMetadata;
 import net.pocketdreams.sequinland.network.protocol.ProtocolInfo;
 
 public class AddEntityPacket extends GamePacket {
@@ -15,6 +17,8 @@ public class AddEntityPacket extends GamePacket {
     public float speedZ;
     public float pitch;
     public float yaw;
+    
+    public EntityMetadata metadata = PocketEntity.getDefaultMetadata();
     
     public AddEntityPacket(Packet packet) {
         super(packet);
@@ -36,7 +40,7 @@ public class AddEntityPacket extends GamePacket {
         this.writeLFloat(this.yaw);
         
         this.writeUnsignedVarInt(0); // TODO: Item!
-        this.writeUnsignedVarInt(0); // TODO: Metadata!
+        this.writeMetadata(metadata);
         this.writeUnsignedVarInt(0); // TODO: Linked Objects!
     }
     

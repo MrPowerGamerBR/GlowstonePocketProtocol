@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.bukkit.inventory.ItemStack;
 
 import net.marfgamer.jraknet.Packet;
+import net.pocketdreams.sequinland.entity.PocketEntity;
+import net.pocketdreams.sequinland.entity.data.EntityMetadata;
 import net.pocketdreams.sequinland.network.protocol.ProtocolInfo;
 
 public class AddPlayerPacket extends GamePacket {
@@ -21,6 +23,8 @@ public class AddPlayerPacket extends GamePacket {
     public float pitch;
     public float yaw;
     public ItemStack heldItem;
+    
+    EntityMetadata metadata = PocketEntity.getDefaultMetadata();
     
     public AddPlayerPacket(Packet packet) {
         super(packet);
@@ -44,7 +48,7 @@ public class AddPlayerPacket extends GamePacket {
         this.writeLFloat(this.yaw);
         
         this.writeItemStack(heldItem);
-        this.writeUnsignedVarInt(0); // TODO: Metadata!
+        this.writeMetadata(metadata);
     }
     
     @Override
