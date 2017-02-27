@@ -51,6 +51,7 @@ import net.glowstone.util.nbt.CompoundTag;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+import net.pocketdreams.sequinland.entity.PocketEntity;
 import net.pocketdreams.sequinland.network.PocketSession;
 import net.pocketdreams.sequinland.network.protocol.packets.ContainerSetContentPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.ContainerSetSlotPacket;
@@ -58,6 +59,7 @@ import net.pocketdreams.sequinland.network.protocol.packets.FullChunkDataPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
 import net.pocketdreams.sequinland.network.protocol.packets.MovePlayerPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.PlayStatusPacket;
+import net.pocketdreams.sequinland.network.protocol.packets.SetEntityDataPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.SetTimePacket;
 import net.pocketdreams.sequinland.network.protocol.packets.StartGamePacket;
 import net.pocketdreams.sequinland.network.protocol.packets.TextPacket;
@@ -424,6 +426,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
                             // PocketAttribute.getAttributeByName(AttributeName.LEVEL).clone(),
                             PocketAttribute.getAttributeByName(AttributeName.SPEED).clone()
                     }).andEncode());
+            this.getPocketSession().sendPocket(new SetEntityDataPacket(SELF_ID, PocketEntity.getDefaultMetadata()).andEncode());
         } else {
             session.send(new PositionRotationMessage(location));
         }
