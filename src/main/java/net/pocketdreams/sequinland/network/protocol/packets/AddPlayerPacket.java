@@ -24,7 +24,7 @@ public class AddPlayerPacket extends GamePacket {
     public float yaw;
     public ItemStack heldItem;
     
-    EntityMetadata metadata = PocketEntity.getDefaultMetadata();
+    public EntityMetadata metadata = PocketEntity.getDefaultMetadata();
     
     public AddPlayerPacket(Packet packet) {
         super(packet);

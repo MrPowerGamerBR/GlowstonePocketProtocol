@@ -1,6 +1,7 @@
 package net.glowstone.entity;
 
 import com.flowpowered.network.Message;
+
 import net.glowstone.EventFactory;
 import net.glowstone.entity.meta.profile.PlayerProfile;
 import net.glowstone.entity.objects.GlowItem;
@@ -10,6 +11,7 @@ import net.glowstone.net.message.play.entity.EntityHeadRotationMessage;
 import net.glowstone.net.message.play.entity.SpawnPlayerMessage;
 import net.glowstone.util.InventoryUtil;
 import net.glowstone.util.Position;
+import net.pocketdreams.sequinland.entity.PocketEntity;
 import net.pocketdreams.sequinland.network.protocol.packets.AddPlayerPacket;
 import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
 
@@ -166,6 +168,10 @@ public abstract class GlowHumanEntity extends GlowLivingEntity implements HumanE
         pePacket.speedZ = 0F;
         pePacket.username = this.getCustomName();
         pePacket.heldItem = this.getItemInHand();
+        pePacket.metadata.putLong(PocketEntity.DATA_FLAGS,
+                1 << PocketEntity.DATA_FLAG_ALWAYS_SHOW_NAMETAG
+                ^ 1 << PocketEntity.DATA_FLAG_CAN_SHOW_NAMETAG
+                );
         pePacket.encode();
         result.add(pePacket);
         
