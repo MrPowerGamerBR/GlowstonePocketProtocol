@@ -16,6 +16,7 @@ import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.util.concurrent.EventExecutorGroup;
 import net.glowstone.GlowServer;
 import net.glowstone.net.GlowSession;
 import net.glowstone.net.handler.legacyping.LegacyPingHandler;
@@ -41,19 +42,29 @@ import net.pocketdreams.sequinland.util.ReflectionUtils;
 
 public class PocketGameServer extends RakNetServer implements ConnectionManager {
     private final GlowServer server;
+    private final EventExecutorGroup group;
         
+    //TODO: Replace this with a RakNet Session UUID to GlowSession UUID mapping 
     static HashMap<RakNetClientSession, GlowPocketSession> sessions = new HashMap<>();
     
     public PocketGameServer(int port, int maxConnections, GlowServer server) {
-        super(port, maxConnections, new MCPEIdentifier(server.getMotd(), PocketProtocol.CURRENT_PROTOCOL, PocketProtocol.MINECRAFT_VERSION_NETWORK, server.getOnlinePlayers().size(),
-                server.getMaxPlayers(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE, "New World", "Survival"));
-        this.server = server;
+    	this(port, maxConnections, server, 1492);
     }
 
     public PocketGameServer(int port, int maxConnections, GlowServer server, int mtu) {
         super(port, maxConnections, mtu, new MCPEIdentifier(server.getMotd(), PocketProtocol.CURRENT_PROTOCOL, PocketProtocol.MINECRAFT_VERSION_NETWORK, server.getOnlinePlayers().size(),
                 server.getMaxPlayers(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE, "New World", "Survival"));
         this.server = server;
+        
+        EventExecutorGroup group = null;
+        try {
+            Field f = ReflectionUtils.findUnderlying(getClass(), "group");
+            f.setAccessible(true);
+            group = (EventExecutorGroup) f.get(this);
+        } catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        this.group = group;
     }
     
     @Override
@@ -68,12 +79,19 @@ public class PocketGameServer extends RakNetServer implements ConnectionManager 
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
+        
+        
+        
         GlowPocketSession pocketSession = (GlowPocketSession) newSession(channel); // This is for the sake of implementing ConnectionManager correctly
         pocketSession.setRakNetClientSession(session);
         
         // Copied and modified from GlowChannelInitializer
         int READ_TIMEOUT = 20;
         int WRITE_IDLE_TIMEOUT = 15;
+
+        MessageHandler handler = new MessageHandler(this);
+        CodecsHandler codecs = new CodecsHandler(ProtocolType.POCKET_EDITION.getProtocol());
+        FramingHandler framing = new FramingHandler();
 
         try {
             channel.config().setOption(ChannelOption.IP_TOS, 0x18);
@@ -84,10 +102,13 @@ public class PocketGameServer extends RakNetServer implements ConnectionManager 
         channel.config().setAllocator(PooledByteBufAllocator.DEFAULT);
 
         channel.pipeline()
-                .addLast("encryption", NoopHandler.INSTANCE)
-                .addLast("compression", NoopHandler.INSTANCE)
-                .addLast("readtimeout", new ReadTimeoutHandler(READ_TIMEOUT))
-                .addLast("writeidletimeout", new IdleStateHandler(0, WRITE_IDLE_TIMEOUT, 0));
+                .addLast(group, "encryption", NoopHandler.INSTANCE)
+                .addLast(group, "framing", framing)
+                .addLast(group, "compression", NoopHandler.INSTANCE)
+                .addLast(group, "codecs", codecs)
+                .addLast(group, "readtimeout", new ReadTimeoutHandler(READ_TIMEOUT))
+                .addLast(group, "writeidletimeout", new IdleStateHandler(0, WRITE_IDLE_TIMEOUT, 0))
+                .addLast(group, "handler", handler);
         // ====================
         
         sessions.put(session, pocketSession);
@@ -126,7 +147,8 @@ public class PocketGameServer extends RakNetServer implements ConnectionManager 
                 pocketPacket.decode();
                 
                 GlowPocketSession pocketSession = sessions.get(session);
-                PEToPCTranslator<GamePacket> translator = TranslatorRegistry.PE_TO_PC_TRANSLATORS.get(pocketPacket.getClass());
+                
+                /*PEToPCTranslator<GamePacket> translator = TranslatorRegistry.PE_TO_PC_TRANSLATORS.get(pocketPacket.getClass());
                 
                 if (translator != null) {
                     if (!(translator.getClass() == PEBatchPacketTranslator.class) && !(translator.getClass() == PEMovePlayerPacketTranslator.class)) {
@@ -139,7 +161,7 @@ public class PocketGameServer extends RakNetServer implements ConnectionManager 
                     return;
                 } else {
                     System.out.println("No valid translator found for " + pocketPacket.getClass().getSimpleName());
-                }
+                }*/
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
                 e.printStackTrace();
             }

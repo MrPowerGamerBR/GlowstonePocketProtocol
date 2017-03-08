@@ -9,8 +9,7 @@ public class LoginPacketHandler implements MessageHandler<GlowPocketSession, Log
 
 	@Override
 	public void handle(GlowPocketSession arg0, LoginPacket arg1) {
-		// TODO Auto-generated method stub
-		
+		System.out.println(getClass().getCanonicalName() + ".handle()");
 	}
 
 }
