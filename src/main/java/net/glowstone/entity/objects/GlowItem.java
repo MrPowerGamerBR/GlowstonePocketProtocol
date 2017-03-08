@@ -6,7 +6,7 @@ import net.glowstone.entity.GlowPlayer;
 import net.glowstone.entity.meta.MetadataIndex;
 import net.glowstone.net.message.play.entity.*;
 import net.glowstone.util.Position;
-import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.glowstone.net.message.GamePacket;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

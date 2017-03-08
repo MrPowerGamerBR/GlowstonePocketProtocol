@@ -52,19 +52,19 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.pocketdreams.sequinland.entity.PocketEntity;
-import net.pocketdreams.sequinland.network.PocketSession;
-import net.pocketdreams.sequinland.network.protocol.packets.ContainerSetContentPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.ContainerSetSlotPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.FullChunkDataPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
-import net.pocketdreams.sequinland.network.protocol.packets.MovePlayerPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.PlayStatusPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.SetEntityDataPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.SetTimePacket;
-import net.pocketdreams.sequinland.network.protocol.packets.StartGamePacket;
-import net.pocketdreams.sequinland.network.protocol.packets.TextPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.UpdateAttributesPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.UpdateBlockPacket;
+import net.pocketdreams.sequinland.glowstone.net.GlowPocketSession;
+import net.pocketdreams.sequinland.glowstone.net.message.ContainerSetContentPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.ContainerSetSlotPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.FullChunkDataPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.GamePacket;
+import net.pocketdreams.sequinland.glowstone.net.message.MovePlayerPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.PlayStatusPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.SetEntityDataPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.SetTimePacket;
+import net.pocketdreams.sequinland.glowstone.net.message.StartGamePacket;
+import net.pocketdreams.sequinland.glowstone.net.message.TextPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.UpdateAttributesPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.UpdateBlockPacket;
 import net.pocketdreams.sequinland.util.PocketChunkUtils;
 import net.pocketdreams.sequinland.util.attributes.PocketAttribute;
 import net.pocketdreams.sequinland.util.attributes.PocketAttribute.AttributeName;
@@ -2871,10 +2871,10 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
      * @return True if the player is using pocket protocol
      */
     public boolean isPocketProtocol() {
-        return session instanceof PocketSession;
+        return session instanceof GlowPocketSession;
     }
     
-    public PocketSession getPocketSession() {
-        return (PocketSession) session;
+    public GlowPocketSession getPocketSession() {
+        return (GlowPocketSession) session;
     }
 }

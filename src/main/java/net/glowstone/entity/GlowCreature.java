@@ -4,8 +4,8 @@ import com.flowpowered.network.Message;
 import net.glowstone.net.message.play.entity.EntityHeadRotationMessage;
 import net.glowstone.net.message.play.entity.SpawnMobMessage;
 import net.glowstone.util.Position;
-import net.pocketdreams.sequinland.network.protocol.packets.AddEntityPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.glowstone.net.message.AddEntityPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.GamePacket;
 import net.pocketdreams.sequinland.util.PocketEntityUtils;
 
 import org.bukkit.Location;

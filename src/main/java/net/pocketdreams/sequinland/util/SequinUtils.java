@@ -2,10 +2,10 @@ package net.pocketdreams.sequinland.util;
 
 import net.marfgamer.jraknet.protocol.Reliability;
 import net.marfgamer.jraknet.session.RakNetClientSession;
-import net.pocketdreams.sequinland.network.PocketNetworkManager;
-import net.pocketdreams.sequinland.network.protocol.ProtocolInfo;
-import net.pocketdreams.sequinland.network.protocol.packets.BatchPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.glowstone.net.PocketGameServer;
+import net.pocketdreams.sequinland.glowstone.net.message.BatchPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.GamePacket;
+import net.pocketdreams.sequinland.glowstone.net.protocol.PocketProtocol;
 import net.pocketdreams.sequinland.util.nukkit.Binary;
 import net.pocketdreams.sequinland.util.nukkit.BinaryStream;
 import net.pocketdreams.sequinland.util.nukkit.Zlib;
@@ -29,13 +29,13 @@ public class SequinUtils {
             }
             byte[] packetBuffer = packetStream.getBuffer();
 
-            Class<? extends GamePacket> clazz = ProtocolInfo.getPacketById(id);
+            Class<? extends GamePacket> clazz = PocketProtocol.getPacketById(id);
 
             if (clazz != null) {
                 try {
                     GamePacket pocketPacket = clazz.newInstance();
                     pocketPacket.setBuffer(packetBuffer);
-                    PocketNetworkManager.handleRakNetPacket(session, pocketPacket);
+                    PocketGameServer.handleRakNetPacket(session, pocketPacket);
                 } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | SecurityException e) {
                     e.printStackTrace();
                 }

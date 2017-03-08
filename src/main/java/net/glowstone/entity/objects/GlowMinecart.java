@@ -7,7 +7,7 @@ import net.glowstone.inventory.GlowInventory;
 import net.glowstone.net.message.play.entity.SpawnObjectMessage;
 import net.glowstone.net.message.play.player.InteractEntityMessage;
 import net.glowstone.util.Position;
-import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.glowstone.net.message.GamePacket;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

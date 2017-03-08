@@ -6,7 +6,7 @@ import net.glowstone.GlowWorld;
 import net.glowstone.block.GlowBlock;
 import net.glowstone.entity.physics.BoundingBox;
 import net.glowstone.net.message.play.entity.SpawnLightningStrikeMessage;
-import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.glowstone.net.message.GamePacket;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

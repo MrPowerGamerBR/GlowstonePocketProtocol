@@ -32,8 +32,8 @@ import net.glowstone.net.protocol.GlowProtocol;
 import net.glowstone.net.protocol.LoginProtocol;
 import net.glowstone.net.protocol.PlayProtocol;
 import net.glowstone.net.protocol.ProtocolType;
-import net.pocketdreams.sequinland.network.PocketSession;
-import net.pocketdreams.sequinland.network.protocol.packets.DisconnectPacket;
+import net.pocketdreams.sequinland.glowstone.net.GlowPocketSession;
+import net.pocketdreams.sequinland.glowstone.net.message.DisconnectPacket;
 
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
@@ -449,13 +449,13 @@ public class GlowSession extends BasicSession {
         // perform the kick, sending a kick message if possible
         if (isActive() && (getProtocol() instanceof LoginProtocol || getProtocol() instanceof PlayProtocol)) {
             // channel is both currently connected and in a protocol state allowing kicks
-            if (this instanceof PocketSession) {
-                ((PocketSession) this).sendPocket(new DisconnectPacket(false, reason).andEncode());
+            if (this instanceof GlowPocketSession) {
+                ((GlowPocketSession) this).sendPocket(new DisconnectPacket(false, reason).andEncode());
             } else {
                 sendWithFuture(new KickMessage(reason)).addListener(ChannelFutureListener.CLOSE);
             }
         } else {
-            if (!(this instanceof PocketSession)) {
+            if (!(this instanceof GlowPocketSession)) {
                 getChannel().close();
             }
         }

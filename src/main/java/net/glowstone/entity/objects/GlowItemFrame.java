@@ -10,7 +10,7 @@ import net.glowstone.net.message.play.entity.EntityTeleportMessage;
 import net.glowstone.net.message.play.entity.SpawnObjectMessage;
 import net.glowstone.net.message.play.player.InteractEntityMessage;
 import net.glowstone.net.message.play.player.InteractEntityMessage.Action;
-import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.glowstone.net.message.GamePacket;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;

@@ -5,7 +5,7 @@ import net.glowstone.EventFactory;
 import net.glowstone.Explosion;
 import net.glowstone.net.message.play.entity.SpawnObjectMessage;
 import net.glowstone.util.Position;
-import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.glowstone.net.message.GamePacket;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;

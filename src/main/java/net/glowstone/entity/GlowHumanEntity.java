@@ -12,8 +12,8 @@ import net.glowstone.net.message.play.entity.SpawnPlayerMessage;
 import net.glowstone.util.InventoryUtil;
 import net.glowstone.util.Position;
 import net.pocketdreams.sequinland.entity.PocketEntity;
-import net.pocketdreams.sequinland.network.protocol.packets.AddPlayerPacket;
-import net.pocketdreams.sequinland.network.protocol.packets.GamePacket;
+import net.pocketdreams.sequinland.glowstone.net.message.AddPlayerPacket;
+import net.pocketdreams.sequinland.glowstone.net.message.GamePacket;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;

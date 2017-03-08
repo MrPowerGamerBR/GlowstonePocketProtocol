@@ -39,7 +39,7 @@ import net.glowstone.util.bans.UuidListFile;
 import net.glowstone.util.loot.LootingManager;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
-import net.pocketdreams.sequinland.network.PocketNetworkManager;
+import net.pocketdreams.sequinland.glowstone.net.PocketGameServer;
 
 import org.bukkit.*;
 import org.bukkit.BanList.Type;
@@ -202,7 +202,7 @@ public final class GlowServer implements Server {
     /**
      * The pocket (MCPE/MCW10E) network manager
      */
-    public PocketNetworkManager pocketNet;
+    public PocketGameServer pocketNetworkServer;
     /**
      * A set of all online players.
      */
@@ -596,12 +596,12 @@ public final class GlowServer implements Server {
 
     private void pocketBind() {
         try {
-            pocketNet = new PocketNetworkManager(19132, this.getMaxPlayers(), this);
+            pocketNetworkServer = new PocketGameServer(19132, this.getMaxPlayers(), this);
         } catch (NullPointerException e)    {
-            pocketNet = new PocketNetworkManager(19132, this.getMaxPlayers(), this, 1492);
+            pocketNetworkServer = new PocketGameServer(19132, this.getMaxPlayers(), this, 1492);
             //this solves an annoying NPE
         }
-        pocketNet.startThreaded();
+        pocketNetworkServer.startThreaded();
     }
     
     public void setPort(int port) {
@@ -652,6 +652,9 @@ public final class GlowServer implements Server {
         // It may take a second or two for Netty to totally clean up
         if (networkServer != null) {
             networkServer.shutdown();
+        }
+        if(pocketNetworkServer != null){
+        	pocketNetworkServer.shutdown();
         }
         if (queryServer != null) {
             queryServer.shutdown();
